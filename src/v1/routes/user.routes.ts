@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { GetUsers, CreateNewUser } from "../../user/userController";
+import { GetUsers, CreateNewUser,deleteUser } from "../../user/userController";
 // const product = require("../../controllers/productController");
 const router = express.Router();
 
@@ -9,7 +9,7 @@ router.get("/", GetUsers);
 //   res.send("Hola esyo ess");
 // });
 
-router.post("/", CreateNewUser);
+router.post("/", deleteUser);
 
 // router.patch("/:cliente", (_req: Request, res: Response) => {
 //   res.send("Update an existing workout");

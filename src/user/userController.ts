@@ -1,11 +1,11 @@
 import express, { Request, Response } from "express";
-import { createNewUser, getUsers } from "./userService";
+import { createNewUser, getUsers, deleteUSer } from "./userService";
 
 
-export const GetUsers = async (req:Request,res:Response)=>{
+export const GetUsers = async (_req:Request,res:Response)=>{
     
-    const dato = req.body;
-    const user = await getUsers();
+    // const dato = req.body;
+    // const user = await getUsers();
     // const arrayEmail = [];
    
     // user.forEach((a)=>{
@@ -16,7 +16,7 @@ export const GetUsers = async (req:Request,res:Response)=>{
     // });
 
    
-    res.send(user);
+    // res.send(user);
 
 };
 export const getUser = (req:Request,res:Response) => {
@@ -30,11 +30,11 @@ export const CreateNewUser = async (req:Request,res:Response) => {
 
             const user = await createNewUser(dato); 
             if(user){
-                res.json(user);
+                res.json(`El usuario ase pudo registrar`);
             }{
 
                 res.send("El usuario No se pudo registrar");
-                console.log("El usuario No se pudo registrar",user);
+                // console.log("El usuario No se pudo registrar",user);
                 // console.log("Se Registro correctamenete");
 
             }
@@ -44,6 +44,9 @@ export const CreateNewUser = async (req:Request,res:Response) => {
 export const updateUser = (req:Request,res:Response) => {
     res.send("Update  user");
 };
-export const deleteUser = (req:Request,res:Response) => {
+export const deleteUser = async (req:Request,res:Response) => {
+    
+    
+    const deleteuse = await deleteUSer(1);
     res.send("Eliminado User");
 };

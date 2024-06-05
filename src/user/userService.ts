@@ -36,14 +36,27 @@ export const createNewUser = async (dato: any) => {
       });
       console.log("REGISTRO");
 
-      return user;
+      return true;
     }else{
         // console.log("El correo ya esta registrado");
         return false;
     }
     //   users.forEach((i) => {
   } catch (error) {
-    console.error("Error al crear usuario ", error);
+    console.error("Error al crear usuario ");
+    
     // throw error;
   }
 };
+
+
+const getUser = async (id: number)=>{
+    
+}
+export const deleteUSer = async (id:number)=>{
+  const deleteuser = await prisma.user.deleteMany({
+    where:{
+      id:id
+    },
+  })
+}
