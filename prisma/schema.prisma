@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,31 +6,156 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Admin {
+  id           String         @id // Añadido valor por defecto
+  firstName    String
+  lastName     String
+  dob          DateTime
+  phone        String         @unique
+  username     String         @unique // Corregido de 'usename' a 'username'
+  email        String         @unique
+  password     String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  AccountAdmin AccountAdmin[]
+}
+
+model AccountAdmin {
+  id           String             @id
+  userId       String             @unique
+  admin        Admin              @relation(fields: [userId], references: [id])
+  balance      Decimal            @default(0)
+  transactions TransactionAdmin[]
+  accountTypeAdminId String?
+  AccountTypeAdmin   AccountTypeAdmin? @relation(fields: [accountTypeAdminId], references: [id])
+  currencyId         String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+}
+
+model AccountTypeAdmin {
+  id           String         @id
+  name         String
+  AccountAdmin AccountAdmin[]
+}
+
+model TransactionAdmin {
+  id             String        @id @default(uuid())
+  amount         Decimal
+  type           String // 'deposit', 'withdrawal', 'transfer'
+  createdAt      DateTime      @default(now())
+  AccountAdmin   AccountAdmin? @relation(fields: [accountAdminId], references: [id])
+  accountAdminId String?
+}
+
+model User {
+  id           String         @id // Añadido valor por defecto
+  username     String         @unique // Corregido de 'usename' a 'username'
+  email        String         @unique
+  password     String
+  accounts     Account[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  profileId    String         @unique
+  // profile      Profile        @relation(fields: [profileId], references: [id])
+  Notification Notification[]
+  Loan         Loan?
+  Profile      Profile[]
+
+}
+
+model Profile {
+  id        String   @id @default(uuid())
+  firstName String
+  lastName  String
+  dob       DateTime
+  address   String
+  phone     String   @unique
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                 String            @id
+  userId             String
+  user               User              @relation(fields: [userId], references: [id])
+  type               AccountType       @relation(fields: [typeId], references: [id])
+  balance            Decimal           @default(0)
+  // currency     Currency
+  transactions       Transaction[]
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  typeId             String
+  Currency           Currency?         @relation(fields: [currencyId], references: [id])
+  currencyId         String?
+ 
+}
+
+model AccountType {
+  id           String         @id @default(uuid())
+  name         String
+  accounts     Account[]
+ 
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  accountId String
+  account   Account  @relation(fields: [accountId], references: [id])
+  amount    Decimal
+  type      String // 'deposit', 'withdrawal', 'transfer'
+  createdAt DateTime @default(now())
+}
+
+model Currency {
+  id           String         @id @default(uuid())
+  name         String
+  symbol       String
+  loans        Loan[]
+  accounts     Account[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Loan {
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id])
+  amount       Decimal
+  interestRate Decimal
+  currencyId   String
+  currency     Currency @relation(fields: [currencyId], references: [id])
+  dueDate      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 model Product {
   id        Int      @id @default(autoincrement())
   title     String   @db.VarChar(255)
   price     String   @db.VarChar(255)
   cantidad  Int
-
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-// model Profile {
-//   id     Int     @id @default(autoincrement())
-//   bio    String?
-//   user   User    @relation(fields: [userId], references: [id])
-//   userId Int     @unique
-// }
-
-model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
-  usename String
-  password String
-  // profile Profile?
-}
 model auth {
-  id      Int      @id 
-  usename String
+  id       Int    @id
+  usename  String
   password String
 }

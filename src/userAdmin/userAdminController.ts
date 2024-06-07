@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
-import { createNewUser, getUsers, deleteUSer } from "./userService";
+import { createNewUserAdmin, getUsersAdmin, deleteUSer } from "./userAdminServices";
 
 export const GetUsers = async (req: Request, res: Response) => {
-  const user = await getUsers();
+  const user = await getUsersAdmin();
 
   console.log("obteniendo usuario");
   res.send(user);
@@ -14,7 +14,7 @@ export const getUser = (req: Request, res: Response) => {
 export const CreateNewUser = async (req: Request, res: Response) => {
   const dato = req.body;
 
-  const user = await createNewUser(dato);
+  const user = await createNewUserAdmin(dato);
 
   let mensaje =
     user == true

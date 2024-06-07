@@ -9,8 +9,8 @@ router.get("/", GetUsers);
 //   res.send("Hola esyo ess");
 // });
 
-router.post("/", deleteUser);
-
+router.post("/", CreateNewUser);
+router.delete("/", deleteUser);
 // router.patch("/:cliente", (_req: Request, res: Response) => {
 //   res.send("Update an existing workout");
 // });

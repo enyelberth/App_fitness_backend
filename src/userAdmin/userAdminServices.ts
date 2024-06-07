@@ -2,15 +2,15 @@ import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const getUsers = async () => {
+export const getUsersAdmin = async () => {
   const user = await prisma.user.findMany();
   return user;
 };
 
-export const createNewUser = async (dato: any) => {
+export const createNewUserAdmin = async (dato: any) => {
   try {
     const email = dato.email;
-    const users = await getUsers();
+    const users = await getUsersAdmin();
 
     let correos = new Array();
 
@@ -19,6 +19,8 @@ export const createNewUser = async (dato: any) => {
         correos.push(element.email);
       }
     });
+
+
     console.log(correos);
 
     const dat = correos.includes(email);
@@ -27,10 +29,10 @@ export const createNewUser = async (dato: any) => {
     if (!dat) {
       const user = await prisma.user.create({
         data: {
-          email: email,
-          name: dato.name,
-          usename: dato.username,
-          password: dato.password,
+          id: dato.id,
+          email: dato.email,
+          username: dato.email,
+          password: dato.email,
         },
       });
       console.log("REGISTRO");
@@ -48,12 +50,12 @@ export const createNewUser = async (dato: any) => {
   }
 };
 
-const getUser = async (id: number) => {};
+const getUserAdmin = async (id: number) => {};
 export const deleteUSer = async (dato: any) => {
   try {
     const email = dato.email;
     let correos = new Array();
-    const usuarios = await getUsers();
+    const usuarios = await getUsersAdmin();
     usuarios.forEach((element) => {
       if (element.email) {
         correos.push(element.email);
@@ -62,8 +64,7 @@ export const deleteUSer = async (dato: any) => {
     console.log(correos);
 
     const dat = correos.includes(email);
-    if(dat){
-
+    if (dat) {
       const deleteuser = await prisma.user.deleteMany({
         where: {
           email: email,
@@ -71,10 +72,9 @@ export const deleteUSer = async (dato: any) => {
       });
 
       return true;
-    }else{
+    } else {
       return false;
     }
-
   } catch (error) {
     console.log("Error al eliminar el usuario");
   }
