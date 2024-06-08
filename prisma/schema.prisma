@@ -50,15 +50,13 @@ model TransactionAdmin {
 }
 
 model User {
-  id           String         @id // Añadido valor por defecto
+  id           Int         @id // Añadido valor por defecto
   username     String         @unique // Corregido de 'usename' a 'username'
   email        String         @unique
   password     String
   accounts     Account[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  profileId    String         @unique
-  // profile      Profile        @relation(fields: [profileId], references: [id])
   Notification Notification[]
   Loan         Loan?
   Profile      Profile[]
@@ -66,13 +64,13 @@ model User {
 }
 
 model Profile {
-  id        String   @id @default(uuid())
+  id        Int   @id @default(autoincrement())
   firstName String
   lastName  String
   dob       DateTime
   address   String
   phone     String   @unique
-  userId    String   @unique
+  userId    Int   
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -80,7 +78,7 @@ model Profile {
 
 model Account {
   id                 String            @id
-  userId             String
+  userId             Int
   user               User              @relation(fields: [userId], references: [id])
   type               AccountType       @relation(fields: [typeId], references: [id])
   balance            Decimal           @default(0)
@@ -123,7 +121,7 @@ model Currency {
 
 model Notification {
   id        String   @id @default(uuid())
-  userId    String
+  userId    Int
   user      User     @relation(fields: [userId], references: [id])
   title     String
   message   String
@@ -134,7 +132,7 @@ model Notification {
 
 model Loan {
   id           String   @id @default(uuid())
-  userId       String   @unique
+  userId       Int   @unique
   user         User     @relation(fields: [userId], references: [id])
   amount       Decimal
   interestRate Decimal

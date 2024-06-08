@@ -20,7 +20,6 @@ export const createNewUserAdmin = async (dato: any) => {
       }
     });
 
-
     console.log(correos);
 
     const dat = correos.includes(email);
