@@ -1,14 +1,18 @@
 import express, { Request, Response } from "express";
-import { createNewProfile } from "./profileServices";
+import { createNewProfile, getProfile } from "./profileServices";
 
-export const CreateNewUSer = async (req: Request, res: Response) => {
+export const GetProfile = async (req: Request, res: Response) => {
+  
+  const profile = await getProfile();
+  console.log("obteniendo Perfiles");
+  
+  res.send(profile);
+};
+
+export const CreateNewProfile = async (req: Request, res: Response) => {
   const dato = req.body;
-
+  
   const profile = await createNewProfile(dato);
-  let mensaje =
-    profile == true
-      ? "El usuario se Registro correctamente"
-      : "El usuario no se pudo registrar";
 
-  res.send(mensaje);
+  res.send(profile);
 };

@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { createNewUser, getUsers, deleteUSer } from "./userService";
+import { createNewUser, getUsers,deleteUser} from "./userService";
 
 export const GetUsers = async (req: Request, res: Response) => {
   const user = await getUsers();
@@ -13,28 +13,18 @@ export const getUser = (req: Request, res: Response) => {
 
 export const CreateNewUser = async (req: Request, res: Response) => {
   const dato = req.body;
-
+  console.log("asda");
   const user = await createNewUser(dato);
 
-  let mensaje =
-    user == true
-      ? "El usuario se Registro correctamente"
-      : "El usuario no se pudo registrar";
-
-  res.send(mensaje);
+  res.send(user);
 };
 export const updateUser = (req: Request, res: Response) => {
   res.send("Update  user");
 };
-export const deleteUser = async (req: Request, res: Response) => {
-  const dato = req.body;
+export const DeleteUser = async (req: Request, res: Response) => {
+   const dato = req.body;
 
-  const deleteuser = await deleteUSer(dato);
+   const user = await deleteUser(dato);
 
-  let mensaje =
-    deleteuser == true
-      ? "El usuario se Elimino correctamente"
-      : "El usuario no se pudo Eliminar";
-
-  res.send(mensaje);
+   res.send(user);
 };

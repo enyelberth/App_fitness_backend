@@ -1,4 +1,6 @@
 import express from "express";
+
+// import user from "./v1/routes/user.router.ts";
 const cors = require("cors");
 const  user = require("./v1/routes/user.routes");
 const rutas  = require("./v1/routes/index");
