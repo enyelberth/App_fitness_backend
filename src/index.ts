@@ -7,6 +7,9 @@ const rutas  = require("./v1/routes/index");
 const productos = require("./v1/routes/product.routes");
 const profile = require("./v1/routes/profiles.routes");
 const auth = require('./v1/routes/auth');
+
+const accountType = require('./v1/routes/accountType.routes');
+const account = require('./v1/routes/account.route');
 const app = express();
 const corOptiopns = {
     origin: '*',
@@ -21,6 +24,8 @@ const PORT = 4000;
 app.use("/api/v2/productos", productos);
 app.use("/api/v2/profile", profile);
 app.use("/api/v2/user", user);
+app.use("/api/v2/accountype", accountType);
+app.use("/api/v2/account", account);
 // app.use("/api/v2/auth", aut);
 // app.use("/api/v1", (req,res)=>{
 //     res.send('HOla a tood');
