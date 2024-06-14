@@ -3,11 +3,9 @@ import { GetUsers, CreateNewUser, DeleteUser } from "../../user/userController";
 // const product = require("../../controllers/productController");
 const router = express.Router();
 
-router.get("/", GetUsers);
+// router.get("/", GetUsers);
 
-// router.get("/:cliente", (_req: Request, res: Response) => {
-//   res.send("Hola esyo ess");
-// });
+router.get("/:cliente",GetUsers);
 
 router.post("/", CreateNewUser);
 router.delete("/", DeleteUser);

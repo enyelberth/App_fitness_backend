@@ -1,17 +1,16 @@
 import express, { Request, Response } from "express";
-import { GetUsers, CreateNewUser, DeleteUser } from "../../user/userController";
 
-import { CreateNewAccount,GetAccounts } from "../../user/account/accountController";
+import { CreateNewAccount,GetAccounts,GetAccount,UpdateAccount } from "../../user/account/accountController";
+import { getAccount } from "../../user/account/accountService";
 // const product = require("../../controllers/productController");
 const router = express.Router();
 
-router.get("/", GetAccounts);
-
-// router.get("/:cliente", (_req: Request, res: Response) => {
-//   res.send("Hola esyo ess");
-// });
+// router.get("/", GetAccounts);
+// router.get("/", GetAccount);
+router.get("/:id",GetAccount);
 
 router.post("/", CreateNewAccount);
+router.put("/", UpdateAccount);
 // router.delete("/", DeleteUser);
 // router.patch("/:cliente", (_req: Request, res: Response) => {
 //   res.send("Update an existing workout");

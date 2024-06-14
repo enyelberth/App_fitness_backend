@@ -100,7 +100,7 @@ model AccountType {
 }
 
 model Transaction {
-  id        String   @id @default(uuid())
+   id        Int   @id @default(autoincrement())
   accountId String
   account   Account  @relation(fields: [accountId], references: [id])
   amount    Decimal
