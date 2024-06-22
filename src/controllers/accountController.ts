@@ -1,10 +1,5 @@
 import express, { Request, Response } from "express";
-import {
-  createNewAccount,
-  getAccounts,
-  getAccount,
-  updateAccount,
-} from "./accountService";
+import {createNewAccount,getAccounts,getAccount,updateAccount,} from "../services/accountService";
 export const GetAccounts = async (req: Request, res: Response) => {
   const profile = await getAccounts();
   console.log("obteniendo Perfiles");

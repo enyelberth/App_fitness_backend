@@ -2,14 +2,14 @@ import express from "express";
 
 // import user from "./v1/routes/user.router.ts";
 const cors = require("cors");
-const  user = require("./v1/routes/user.routes");
-const rutas  = require("./v1/routes/index");
-const productos = require("./v1/routes/product.routes");
-const profile = require("./v1/routes/profiles.routes");
-const auth = require('./v1/routes/auth');
+const  user = require("./routes/user.routes");
+const rutas  = require("./routes/index");
+const productos = require("./routes/product.routes");
+const profile = require("./routes/profiles.routes");
+const auth = require('./routes/auth');
 
-const accountType = require('./v1/routes/accountType.routes');
-const account = require('./v1/routes/account.route');
+const accountType = require('./routes/accountType.routes');
+const account = require('./routes/account.route');
 const app = express();
 const corOptiopns = {
     origin: '*',

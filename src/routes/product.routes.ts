@@ -1,6 +1,6 @@
 import express,{ Request,Response } from "express";
 
-const product = require("../../controllers/productController");
+const product = require("../controllers/productController");
 const router = express.Router();
 
 router.get("/", product.getProducts);

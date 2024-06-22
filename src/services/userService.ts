@@ -4,6 +4,9 @@ const prisma = new PrismaClient();
 
 export const getUsers = async () => {
   const user = await prisma.user.findMany();
+
+  
+  console.log(user);
   return user;
 };
 
@@ -28,7 +31,7 @@ export const createNewUser = async (dato: any) => {
 
     const dat = correos.includes(email);
     //
-
+    console.log(dato)
     // Verificar ID
     users.forEach((element) => {
       if (element.id) {

@@ -1,6 +1,6 @@
 import { PrismaClient, Prisma } from "@prisma/client";
-import { getUsers } from "../userService";
-import { getAccountsType } from "./accounType/accounTypeService";
+import { getUsers } from "../services/userService";
+import { getAccountsType } from "../services/accounTypeService";
 
 const prisma = new PrismaClient();
 

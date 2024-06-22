@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
-import { createNewUser, getUsers,deleteUser} from "./userService";
+import { createNewUser, getUsers,deleteUser} from "../services/userService";
 
 export const GetUsers = async (req: Request, res: Response) => {
-  const user = await getUsers();
-
   console.log("obteniendo usuario");
+  const user = await getUsers();
+  console.log(user);
   res.send(user);
 };
 export const getUser = (req: Request, res: Response) => {
@@ -13,7 +13,7 @@ export const getUser = (req: Request, res: Response) => {
 
 export const CreateNewUser = async (req: Request, res: Response) => {
   const dato = req.body;
-  console.log("asda");
+  console.log(dato);
   const user = await createNewUser(dato);
 
   res.send(user);

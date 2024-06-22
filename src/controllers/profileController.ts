@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { createNewProfile, getProfile } from "./profileServices";
+import { createNewProfile, getProfile } from "../services/profileServices";
 
 export const GetProfile = async (req: Request, res: Response) => {
   

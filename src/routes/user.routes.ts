@@ -1,18 +1,14 @@
 import express, { Request, Response } from "express";
-import { GetUsers, CreateNewUser, DeleteUser } from "../../user/userController";
-import { CreateNewProfile } from "../../user/profile/profileController";
-
+import { GetUsers, CreateNewUser, DeleteUser } from "../controllers/userController";
 // const product = require("../../controllers/productController");
 const router = express.Router();
 
 router.get("/", GetUsers);
 
-// router.get("/:cliente", (_req: Request, res: Response) => {
-//   res.send("Hola esyo ess");
-// });
+// router.get("/:cliente",GetUsers);
 
-router.post("/", CreateNewProfile);
-// router.delete("/", deleteUser);
+router.post("/", CreateNewUser);
+router.delete("/", DeleteUser);
 // router.patch("/:cliente", (_req: Request, res: Response) => {
 //   res.send("Update an existing workout");
 // });
