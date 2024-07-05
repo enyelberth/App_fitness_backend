@@ -1,8 +1,9 @@
 import express, { Request, Response } from "express";
+
 import {Login} from '../auth/authControllers';
 import { ensureToken } from '../middlewares/index';
 
-// const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
 
 
