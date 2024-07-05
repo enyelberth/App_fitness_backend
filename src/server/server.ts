@@ -1,6 +1,6 @@
 import express from "express";
 // import cors from "cors";
-import { account, accountType, profile, user } from "../routes/index";
+import { account, accountType, auth, profile, user } from "../routes/index";
 import { getUser } from "../controllers/userController";
 
 const cors = require("cors");
@@ -24,6 +24,7 @@ export class Server {
       account: this.pre + "/account",
       accountType: this.pre + "/accountType",
       profile:this.pre + "/profile",
+      auth:this.pre + "/auth",
     };
 
 
@@ -36,6 +37,7 @@ export class Server {
     this.app.use(express.static("public"));
   }
   routes() {
+    this.app.use(this.paths.auth,auth);
     this.app.use(this.paths.user, user);
     this.app.use(this.paths.account, account);
     this.app.use(this.paths.accountType,accountType);
