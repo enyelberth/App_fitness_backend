@@ -1,13 +1,16 @@
-import express from "express";
-const Producto = require("./product.routes");
-
-const rutas = express.Router();
-
-rutas.get('/ping',(_req, res)=>{
-    console.log('Probando Ping');
-    res.send('PINh11111111');
-});
-rutas.get('/productos',Producto);
+import user from "./user.routes";
+import producto from "./product.routes";
+import profile from "./profiles.routes";
+import account from "./account.route";
+import accountType from "./accountType.routes";
+import auth  from "./auth.routes";
 
 
-module.exports =rutas;
+export {
+    user,
+    producto,
+    profile,
+    account,
+    accountType,
+    auth
+}

@@ -1,9 +1,8 @@
-import express, { Request, Response } from "express";
-
+import Router, { Request, Response } from "express";
 import { CreateNewAccount,GetAccounts,GetAccount,UpdateAccount } from "../controllers/accountController";
 import { getAccount } from "../services/accountService";
 // const product = require("../../controllers/productController");
-const router = express.Router();
+const router = Router();
 
 // router.get("/", GetAccounts);
 // router.get("/", GetAccount);
@@ -20,4 +19,4 @@ router.put("/", UpdateAccount);
 //   res.send("Delete an existing workout");
 // });
 
-module.exports = router;
+export default router;

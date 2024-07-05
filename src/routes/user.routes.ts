@@ -1,8 +1,11 @@
-import express, { Request, Response } from "express";
-import { GetUsers, CreateNewUser, DeleteUser } from "../controllers/userController";
-// const product = require("../../controllers/productController");
-const router = express.Router();
+import Router, { Request, Response } from "express";
+import {
+  GetUsers,
+  CreateNewUser,
+  DeleteUser,
+} from "../controllers/userController";
 
+const router = Router();
 router.get("/", GetUsers);
 
 // router.get("/:cliente",GetUsers);
@@ -17,4 +20,4 @@ router.delete("/", DeleteUser);
 //   res.send("Delete an existing workout");
 // });
 
-module.exports = router;
+export default router;

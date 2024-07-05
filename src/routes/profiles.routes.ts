@@ -1,9 +1,9 @@
-import express, { Request, Response } from "express";
+import Router, { Request, Response } from "express";
 import { GetUsers, CreateNewUser, DeleteUser } from "../controllers/userController";
 import { CreateNewProfile } from "../controllers/profileController";
 
 // const product = require("../../controllers/productController");
-const router = express.Router();
+const router = Router();
 
 router.get("/", GetUsers);
 
@@ -21,4 +21,4 @@ router.post("/", CreateNewProfile);
 //   res.send("Delete an existing workout");
 // });
 
-module.exports = router;
+export default router;

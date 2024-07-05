@@ -1,7 +1,7 @@
-import express,{ Request,Response } from "express";
+import Router,{ Request,Response } from "express";
 
 const product = require("../controllers/productController");
-const router = express.Router();
+const router = Router();
 
 router.get("/", product.getProducts);
 
@@ -18,5 +18,4 @@ router.patch("/:cliente", (_req: Request, res: Response) => {
 router.delete("/:cliente", (_req:Request, res:Response) => {
   res.send("Delete an existing workout");
 });
-
-module.exports = router;
+export default router;
