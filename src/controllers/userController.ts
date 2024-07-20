@@ -13,10 +13,11 @@ export const getUser = (req: Request, res: Response) => {
 
 export const CreateNewUser = async (req: Request, res: Response) => {
   const dato = req.body;
-  console.log(dato);
-  const user = await createNewUser(dato);
+  // console.log(dato);
+  console.log(dato.id)
+  // const user = await createNewUser(dato);
 
-  res.send(user);
+  // res.send(user);
 };
 export const updateUser = (req: Request, res: Response) => {
   res.send("Update  user");

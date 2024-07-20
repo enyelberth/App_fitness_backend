@@ -5,13 +5,15 @@ import {
   DeleteUser,
 } from "../controllers/userController";
 
+import { UserValidator } from "../validators";
 const router = Router();
+const userValidator = new UserValidator();
 router.get("/", GetUsers);
 
 // router.get("/:cliente",GetUsers);
 
-router.post("/", CreateNewUser);
-router.delete("/", DeleteUser);
+router.post("/", userValidator.validateUser ,CreateNewUser);
+// router.delete("/", DeleteUser);
 // router.patch("/:cliente", (_req: Request, res: Response) => {
 //   res.send("Update an existing workout");
 // });
