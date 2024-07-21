@@ -82,39 +82,15 @@ export const createNewUser = async (dato: any) => {
         status: 200,
         data: user,
       };
-    }else if(validateEmail){
-      console.log("El correo ya esta registrado");
+    }else{
       return {
         message: `El correo ya se encuentra registrado`,
         status: 200,
 
-      };
-    }else if(validateID){
-      console.log("El ID ya esta registrado");
-      return {
-        message: `El ID ya se encuentra registrado`,
-        status: 200,
-
-      };
-    }else if(validateUsername){
-      console.log("El Username ya esta registrado");
-      return {
-        message: `El Username ya se encuentra registrado`,
-        status: 200,
-
-      };
+      };      
     }
+ 
 
-
-    // } else if(d) {
-
-    // }else if(d){
-    //   return {
-    //     message: `El email ya esta registrado`,
-    //     status: 200,
-    //     data: user,
-    //   };
-    
   } catch (error) {
     console.log(error);
     return {

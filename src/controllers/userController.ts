@@ -29,7 +29,7 @@ export const GetUser = async (req: Request, res: Response) => {
 export const CreateNewUser = async (req: Request, res: Response) => {
   const dato = req.body;
 // errror resolver despues
-  const { data,status, message } = await createNewUser(dato);
+  const { status, message } = await createNewUser(dato);
 
   return res.status(status).json({
     message,
