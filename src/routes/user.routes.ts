@@ -3,6 +3,7 @@ import {
   GetUsers,
   CreateNewUser,
   DeleteUser,
+  GetUser,
 } from "../controllers/userController";
 
 import { UserValidator } from "../validators";
@@ -10,9 +11,9 @@ const router = Router();
 const userValidator = new UserValidator();
 router.get("/", GetUsers);
 
-// router.get("/:cliente",GetUsers);
-
-router.post("/", userValidator.validateUser ,CreateNewUser);
+router.get("/:cliente",GetUser);
+router.post("/",CreateNewUser);
+// router.post("/", userValidator.validateUser ,CreateNewUser);
 // router.delete("/", DeleteUser);
 // router.patch("/:cliente", (_req: Request, res: Response) => {
 //   res.send("Update an existing workout");

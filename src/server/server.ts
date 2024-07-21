@@ -1,7 +1,6 @@
 import express from "express";
 // import cors from "cors";
 import { account, accountType, auth, profile, user } from "../routes/index";
-import { getUser } from "../controllers/userController";
 
 const cors = require("cors");
 

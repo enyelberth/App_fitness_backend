@@ -1,6 +1,5 @@
 import { PrismaClient, Prisma } from "@prisma/client";
-import { getUsers } from "../services/userService";
-import { createNewUser } from "./createNewUser";
+import { createNewUser, getUsers } from "../services/userService";
 const prisma = new PrismaClient();
 
 export const getProfile = async () => {
@@ -12,17 +11,17 @@ export const createNewProfile = async (dato: any) => {
   const profile = await getProfile();
   const datos = dato;
 
-  const id = dato.id.toString();
-  console.log(datos);  
-  const idUser = new Array();
+  // const id = dato.id.toString();
+  // console.log(datos);  
+  // const idUser = new Array();
 
-  profile.forEach(element => {
-      if (element.userId) {
-        idUser.push(element.userId);
-      }
-  });
+  // profile.forEach(element => {
+  //     if (element.userId) {
+  //       idUser.push(element.userId);
+  //     }
+  // });
 
-  const date = idUser.includes(id);
+  // const date = idUser.includes(id);
   
   
   const user = await prisma.profile.create({

@@ -25,21 +25,21 @@ export const createNewAccount = async (dato: any) => {
   const id3 = dato.typeId;
   const id4 = dato.id;
 
-  users.forEach((element) => {
-    if (element.id) {
-      idUser.push(element.id);
-    }
-  });
-  typeAccount.forEach((element) => {
-    if (element.id) {
-      idTypeaccount.push(element.id);
-    }
-  });
-  AccountId.forEach((element) => {
-    if (element.id) {
-      AccountIdArray.push(element.id);
-    }
-  });
+  // users.forEach((element) => {
+  //   if (element.id) {
+  //     idUser.push(element.id);
+  //   }
+  // });
+  // typeAccount.forEach((element) => {
+  //   if (element.id) {
+  //     idTypeaccount.push(element.id);
+  //   }
+  // });
+  // AccountId.forEach((element) => {
+  //   if (element.id) {
+  //     AccountIdArray.push(element.id);
+  //   }
+  // });
 
   const date = idUser.includes(id2);
   const date2 = idTypeaccount.includes(id3);

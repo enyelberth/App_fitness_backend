@@ -1,10 +1,48 @@
-export const serchEmail = (emails: any, email: string) => {
+export const searchEmail = (dato: any, email: string) => {
+  
+  const emails = dato["data"];
+  // console.log(dato["data"]); 
+  
   let correos = new Array();
-  emails.forEach((element) => {
+  emails.forEach((element:any) => {
     if (element.email) {
+      // console.log(element,email);
       correos.push(element.email);
     }
   });
-  const dato = correos.includes(email);
-  return dato;
+  const a = correos.includes(email);
+  // console.log(a);
+  return a;
+};
+export const searchId = (dato: any, id: number) => {
+  
+  const emails = dato["data"];
+  // console.log(dato["data"]); 
+  
+  let ids = new Array();
+  emails.forEach((element:any) => {
+    if (element.id) {
+      // console.log(element,email);
+      ids.push(element.id);
+    }
+  });
+  const a = ids.includes(id);
+  // console.log(a);
+  return a;
+};
+export const searchUsername = (dato: any, username: number) => {
+  
+  const emails = dato["data"];
+  // console.log(dato["data"]); 
+  
+  let ids = new Array();
+  emails.forEach((element:any) => {
+    if (element.username) {
+      // console.log(element,email);
+      ids.push(element.username);
+    }
+  });
+  const a = ids.includes(username);
+  // console.log(a);
+  return a;
 };
