@@ -1,7 +1,6 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 import { searchEmail, searchId, searchUsername } from "../helpers";
 
-
 const prisma = new PrismaClient();
 
 export const getUsers = async () => {
@@ -58,17 +57,16 @@ export const getUser = async (dato: number) => {
 };
 export const createNewUser = async (dato: any) => {
   try {
-      // console.log(dato);
+    console.log(dato);
     const id = dato.id;
     const username = dato.username;
     const data = await getUsers();
 
     const validateEmail = searchEmail(data, dato.email);
-    const validateID = searchId(data,dato.id); 
-    const validateUsername = searchUsername(data,dato.username);
-    
-   
-    if(!validateEmail&&!validateID&&!validateUsername){
+    const validateID = searchId(data, dato.id);
+    const validateUsername = searchUsername(data, dato.username);
+
+    if (!validateEmail && !validateID && !validateUsername) {
       const user = await prisma.user.create({
         data: {
           id: dato.id,
@@ -82,15 +80,12 @@ export const createNewUser = async (dato: any) => {
         status: 200,
         data: user,
       };
-    }else{
+    } else {
       return {
-        message: `El correo ya se encuentra registrado`,
+        message: `Esos datos ya se encuentran registrado`,
         status: 200,
-
-      };      
+      };
     }
- 
-
   } catch (error) {
     console.log(error);
     return {
@@ -100,42 +95,34 @@ export const createNewUser = async (dato: any) => {
   }
 };
 
-export const deleteUser = async (dato: any) => {
+export const deleteUser = async (dato: number) => {
   try {
-    const id = dato.id;
-    const users = await getUsers();
+    const data = await getUsers();
 
-    let numeroIdenticacion = new Array();
+    const a = searchId(data["data"], dato);
+    console.log(a);
+    if(a){
 
-    // Verificar ID
-    // users.forEach((element) => {
-    //   if (element.id) {
-    //     numeroIdenticacion.push(element.id);
-    //   }
-    // });
-    console.log(id);
-
-    const data = numeroIdenticacion.includes(id);
-    console.log(data);
-
-    const dat1 = false;
-    // console.log(dat1);
-
-    if (data) {
       const deleteuser = await prisma.user.deleteMany({
         where: {
-          id: id,
+          id: dato,
         },
       });
-
-      console.log("El usuario fue eliminado con exito");
-
-      return "El usuario fue Elimminado con exito";
-    } else if (data) {
-      console.log("El Usuario no esta registrado");
-      return false;
+      return {
+        message: `El usuario fue eliminado con exito`,
+        status: 200,
+      };
+    }else{
+      return {
+        message: `El usuario no se encuentra registrado`,
+        status: 200,
+      };
     }
   } catch (error) {
-    console.error("Error al crear usuario ");
+    console.log(error);
+    return {
+      message: `Contacte con el administrador se encontror el error: ${error}`,
+      status: 500,
+    };
   }
 };

@@ -16,7 +16,6 @@ export const GetUsers = async (req: Request, res: Response) => {
   });
 };
 export const GetUser = async (req: Request, res: Response) => {
-
   const { cliente } = req.params;
   const { data, status, message } = await getUser(parseInt(cliente));
 
@@ -28,21 +27,23 @@ export const GetUser = async (req: Request, res: Response) => {
 
 export const CreateNewUser = async (req: Request, res: Response) => {
   const dato = req.body;
-// errror resolver despues
+  // errror resolver despues
+  console.log(dato);
   const { status, message } = await createNewUser(dato);
 
   return res.status(status).json({
     message,
-    
   });
 };
 export const updateUser = (req: Request, res: Response) => {
   res.send("Update  user");
 };
 export const DeleteUser = async (req: Request, res: Response) => {
-  const dato = req.body;
+  const { cliente } = req.params;
 
-  const user = await deleteUser(dato);
-
-  res.send(user);
+  const {message,status} = await deleteUser(parseInt(cliente));
+  res.status(status).json({
+    message
+  })
+  // res.send(user);
 };
