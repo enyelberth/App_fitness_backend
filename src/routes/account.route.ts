@@ -1,6 +1,6 @@
 import Router, { Request, Response } from "express";
 import { CreateNewAccount,GetAccounts,GetAccount,UpdateAccount } from "../controllers/accountController";
-import { getAccount } from "../services/accountService";
+import { getAccount } from "../services/accounts/accountService";
 // const product = require("../../controllers/productController");
 const router = Router();
 

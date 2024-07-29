@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import {createNewAccountType,getAccountsType} from "../services/accounTypeService";
+import {createNewAccountType,getAccountsType} from "../services/accounts/accounTypeService";
 
 export const GetAccountsType = async (req: Request, res: Response) => {
   const account = await getAccountsType();
