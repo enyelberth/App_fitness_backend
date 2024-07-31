@@ -1,6 +1,6 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 import { getUsers } from "../users/userService";
-import { getAccountsType } from "../accounts/accounTypeService";
+// import { getAccountsType } from "../accounts/accounTypeService";
 
 const prisma = new PrismaClient();
 
@@ -11,7 +11,7 @@ export const getAccounts = async () => {
 
 export const createNewAccount = async (dato: any) => {
   const users = await getUsers();
-  const typeAccount = await getAccountsType();
+  // const typeAccount = await getAccountsType();
 
   const AccountId = await getAccounts();
 

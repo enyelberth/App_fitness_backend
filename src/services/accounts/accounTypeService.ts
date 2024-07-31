@@ -33,31 +33,31 @@ export const getAccountsType = async (dato:number) => {
 };
 
 export const createNewAccountType = async (dato: any) => {
-  const accountype = await getAccountsType();
+  const accountype = await getAccountsTypes();
   const datos = dato;
 
   const id = dato.id;
   console.log(datos);
   const idAccount = new Array();
 
-  accountype.forEach((element) => {
-    if (element.id) {
-      idAccount.push(element.id);
-    }
-  });
+  // accountype.forEach((element) => {
+  //   if (element.id) {
+  //     idAccount.push(element.id);
+  //   }
+  // });
 
-  const date = accountype.includes(id);
+  // const date = accountype.includes(id);
 
-  if (!date) {
-    const user = await prisma.accountType.create({
-      data: {
-        id: id,
-        name: datos.name,
-      },
-    });
-    return "El tipo de cuenta se registro correctamente";
-  }
-  {
-    return "El usuario no se pudo registrar";
-  }
+  // if (!date) {
+  //   const user = await prisma.accountType.create({
+  //     data: {
+  //       id: id,
+  //       name: datos.name,
+  //     },
+  //   });
+  //   return "El tipo de cuenta se registro correctamente";
+  // }
+  // {
+  //   return "El usuario no se pudo registrar";
+  // }
 };

@@ -2,10 +2,10 @@ import express, { Request, Response } from "express";
 import {createNewAccountType,getAccountsType} from "../services/accounts/accounTypeService";
 
 export const GetAccountsType = async (req: Request, res: Response) => {
-  const account = await getAccountsType();
+  // const account = await getAccountsType();
   console.log("Obteniendo ACcoun type");
 
-  res.send(account);
+  // res.send(account);
 };
 
 export const CreateNewAccountType = async (req: Request, res: Response) => {
