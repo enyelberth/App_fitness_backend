@@ -6,12 +6,13 @@ import {
   GetUser,
 } from "../controllers/userController";
 import { UserValidator } from "../validators";
+import { Login } from "../auth/authControllers";
 const router = Router();
 const userValidator = new UserValidator();
-router.get("/", GetUsers);
+router.get("/",Login, GetUsers);
 
-router.get("/:cliente",GetUser);
-router.post("/",userValidator.validateUser,CreateNewUser);
+// router.get("/:cliente",GetUser);
+// router.post("/",userValidator.validateUser,CreateNewUser);
 // router.delete("/:cliente", DeleteUser);
 
 
