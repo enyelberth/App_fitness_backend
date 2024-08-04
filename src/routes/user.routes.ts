@@ -9,10 +9,10 @@ import { UserValidator } from "../validators";
 import { Login } from "../auth/authControllers";
 const router = Router();
 const userValidator = new UserValidator();
-router.get("/",Login, GetUsers);
+router.get("/", GetUsers);
 
-// router.get("/:cliente",GetUser);
-// router.post("/",userValidator.validateUser,CreateNewUser);
+router.get("/:cliente",GetUser);
+router.post("/",CreateNewUser);
 // router.delete("/:cliente", DeleteUser);
 
 

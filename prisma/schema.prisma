@@ -82,18 +82,18 @@ model Account {
   user               User              @relation(fields: [userId], references: [id])
   type               AccountType       @relation(fields: [typeId], references: [id])
   balance            Decimal           @default(0)
-  // currency     Currency
+  
   transactions       Transaction[]
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
-  typeId             String
+  typeId             Int
   Currency           Currency?         @relation(fields: [currencyId], references: [id])
   currencyId         String?
  
 }
 
 model AccountType {
-  id           String         @id @default(uuid())
+  id           Int         @id @default(autoincrement())
   name         String
   accounts     Account[]
  

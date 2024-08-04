@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 
 
 
+// const product = require("../../controllers/productController");
 
 const router = express.Router();
 

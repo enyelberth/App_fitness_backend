@@ -12,13 +12,12 @@ export const getAccountsTypes = async () => {
         message: `No se encontraron tipos de cuentas registradas`,
         data: account,
       };
-    } else {
-      return {
-        status: 200,
-        message: `Tipos de Cuentas encontradas exitoxamente`,
-        data: account,
-      };
     }
+    return {
+      status: 200,
+      message: `Tipos de Cuentas encontradas exitoxamente`,
+      data: account,
+    };
   } catch (error) {
     return {
       status: 500,
@@ -27,37 +26,51 @@ export const getAccountsTypes = async () => {
   }
 };
 
-export const getAccountsType = async (dato:number) => {
-  const account = await prisma.accountType.findMany();
-  return account;
+export const getAccountsType = async (dato: any) => {
+  try {
+    const accountType = await prisma.accountType.findMany({
+      where: {
+        id: dato,
+      },
+    });
+    if (accountType == undefined) {
+      return {
+        message: `No se encontro ese tipo de cuenta registrada`,
+        status: 500,
+      };
+    } else {
+      return {
+        message: `El tipo de cuenta fue encontrado exitozamente`,
+        status: 200,
+        data: accountType,
+      };
+    }
+  } catch (error) {
+    return {
+      message: ``,
+      status: 500,
+    };
+  }
 };
 
 export const createNewAccountType = async (dato: any) => {
-  const accountype = await getAccountsTypes();
-  const datos = dato;
+  try {
 
-  const id = dato.id;
-  console.log(datos);
-  const idAccount = new Array();
+    const user = await prisma.accountType.create({
+      data: {
+        name: dato.name,
+      },
+    });
 
-  // accountype.forEach((element) => {
-  //   if (element.id) {
-  //     idAccount.push(element.id);
-  //   }
-  // });
-
-  // const date = accountype.includes(id);
-
-  // if (!date) {
-  //   const user = await prisma.accountType.create({
-  //     data: {
-  //       id: id,
-  //       name: datos.name,
-  //     },
-  //   });
-  //   return "El tipo de cuenta se registro correctamente";
-  // }
-  // {
-  //   return "El usuario no se pudo registrar";
-  // }
+    return {
+      message: `El type Account fue registrado correctamente`,
+      status: 200,
+      data: user,
+    };
+  } catch (error) {
+    return {
+      message: `Error contacte con el administrador`,
+      status: 500,
+    };
+  }
 };
