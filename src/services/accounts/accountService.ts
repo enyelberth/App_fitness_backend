@@ -3,10 +3,72 @@ import { getUsers } from "../users/userService";
 // import { getAccountsType } from "../accounts/accounTypeService";
 
 const prisma = new PrismaClient();
+export const getAccount = async (dato: string) => {
+  try {
+  const accounts = await getAccounts();
+  const AccountIdArray = new Array();
+
+  
+    const profile = await prisma.profile.findMany({
+      where: {
+        id: dato
+      },
+    });
+    if (profile.length == 0) {
+      return {
+        message: `El perfil no se encontro registrado`,
+        status: 200,
+        data: profile,
+      };
+    }
+
+    return {
+      message: `Perfil encontrado exitosamente`,
+      status: 200,
+      data: profile,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      message: `Contacte con el administrador se encontror el error: ${error}`,
+      status: 500,
+    };
+  }
+
+
+};
 
 export const getAccounts = async () => {
-  const account = await prisma.account.findMany();
-  return account;
+  try{
+
+
+    
+    const account = await prisma.account.findMany();
+
+
+    if(account.length ==0){
+      return{
+        status:200,  
+        account,
+        message: `No se encontraron cuentas registradas`,
+      
+      };
+  
+    }    
+    return{
+      status:200,  
+      account,
+      message: `Las cuentas se encontraron exittazamente`,
+      
+    };
+
+  }catch(error){
+    console.log(`Error contacte con el administrador ${error}`);
+
+    return{
+      message:`Erro contacte con el administrador ${error}`;
+    }
+  }
 };
 
 export const createNewAccount = async (dato: any) => {
@@ -75,31 +137,3 @@ export const updateAccount = async (dato: any) => {
   return "se update correctamente";
 };
 
-export const getAccount = async (dato: string) => {
-  const accounts = await getAccounts();
-  const AccountIdArray = new Array();
-
-
-
-  accounts.forEach((element) => {
-    if (element.id) {
-      AccountIdArray.push(element.id);
-    }
-  });
-
-  const date3 = AccountIdArray.includes(dato);
-
-  // console.log(date3);
-
-  if (date3) {
-    const account = await prisma.account.findMany({
-      where: {
-        id: dato,
-      },
-    });
-
-    return account;
-  } else {
-    return "El usuario no se pudo encontrar";
-  }
-};

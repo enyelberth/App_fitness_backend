@@ -46,3 +46,38 @@ export const searchUsername = (dato: any, username: number) => {
   // console.log(a);
   return a;
 };
+
+export const searchIduser = (dato: any, id: number) => {
+  
+  const users = dato["data"];
+  // console.log(users);
+  // console.log(dato["data"]); 
+  
+  let ids = new Array();
+  users.forEach((element:any) => {
+    if (element.userId) {
+      // console.log(element,email);
+      ids.push(element.userId);
+    }
+  });
+  const a = ids.includes(id);
+  // console.log(a);
+  return a;
+};
+export const searchPhone = (dato: any, id: number) => {
+  
+  const phones = dato["data"];
+  // console.log(users);
+  // console.log(dato["data"]); 
+  
+  let ids = new Array();
+  phones.forEach((element:any) => {
+    if (element.phone) {
+      // console.log(element,email);
+      ids.push(element.phone);
+    }
+  });
+  const a = ids.includes(id);
+  // console.log(a);
+  return a;
+};
