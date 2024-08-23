@@ -4,36 +4,36 @@ import { getUsers } from "../users/userService";
 
 const prisma = new PrismaClient();
 export const getAccount = async (dato: string) => {
-  try {
-  const accounts = await getAccounts();
-  const AccountIdArray = new Array();
+  // try {
+  // const accounts = await getAccounts();
+  // const AccountIdArray = new Array();
 
   
-    const profile = await prisma.profile.findMany({
-      where: {
-        id: dato
-      },
-    });
-    if (profile.length == 0) {
-      return {
-        message: `El perfil no se encontro registrado`,
-        status: 200,
-        data: profile,
-      };
-    }
+  //   const profile = await prisma.profile.findMany({
+  //     where: {
+  //       id: dato
+  //     },
+  //   });
+  //   if (profile.length == 0) {
+  //     return {
+  //       message: `El perfil no se encontro registrado`,
+  //       status: 200,
+  //       data: profile,
+  //     };
+  //   }
 
-    return {
-      message: `Perfil encontrado exitosamente`,
-      status: 200,
-      data: profile,
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      message: `Contacte con el administrador se encontror el error: ${error}`,
-      status: 500,
-    };
-  }
+  //   return {
+  //     message: `Perfil encontrado exitosamente`,
+  //     status: 200,
+  //     data: profile,
+  //   };
+  // } catch (error) {
+  //   console.log(error);
+  //   return {
+  //     message: `Contacte con el administrador se encontror el error: ${error}`,
+  //     status: 500,
+  //   };
+  // }
 
 
 };
