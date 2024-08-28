@@ -66,6 +66,8 @@ export const searchIduser = (dato: any, id: number) => {
 
 
 export const search = (dato: any, option: Record<any,any>) => {
+  
   const optionsvalue = Object.keys(option);
-  return dato["data"].find((v:any)=>v[optionsvalue[0]] === option[optionsvalue[0]]) ? true : false;
+
+  return !!dato["data"].find((v:any)=>v[optionsvalue[0]] === option[optionsvalue[0]]);
 };
