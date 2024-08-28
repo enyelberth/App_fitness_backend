@@ -1,10 +1,9 @@
 export const searchEmail = (dato: any, email: string) => {
-  
   const emails = dato["data"];
-  // console.log(dato["data"]); 
-  
+  // console.log(dato["data"]);
+
   let correos = new Array();
-  emails.forEach((element:any) => {
+  emails.forEach((element: any) => {
     if (element.email) {
       // console.log(element,email);
       correos.push(element.email);
@@ -15,12 +14,11 @@ export const searchEmail = (dato: any, email: string) => {
   return a;
 };
 export const searchId = (dato: any, id: number) => {
-  
   const emails = dato["data"];
-  // console.log(dato["data"]); 
-  
+  // console.log(dato["data"]);
+
   let ids = new Array();
-  emails.forEach((element:any) => {
+  emails.forEach((element: any) => {
     if (element.id) {
       // console.log(element,email);
       ids.push(element.id);
@@ -31,12 +29,11 @@ export const searchId = (dato: any, id: number) => {
   return a;
 };
 export const searchUsername = (dato: any, username: number) => {
-  
   const emails = dato["data"];
-  // console.log(dato["data"]); 
-  
+  // console.log(dato["data"]);
+
   let ids = new Array();
-  emails.forEach((element:any) => {
+  emails.forEach((element: any) => {
     if (element.username) {
       // console.log(element,email);
       ids.push(element.username);
@@ -48,13 +45,12 @@ export const searchUsername = (dato: any, username: number) => {
 };
 
 export const searchIduser = (dato: any, id: number) => {
-  
   const users = dato["data"];
   // console.log(users);
-  // console.log(dato["data"]); 
-  
+  // console.log(dato["data"]);
+
   let ids = new Array();
-  users.forEach((element:any) => {
+  users.forEach((element: any) => {
     if (element.userId) {
       // console.log(element,email);
       ids.push(element.userId);
@@ -64,20 +60,12 @@ export const searchIduser = (dato: any, id: number) => {
   // console.log(a);
   return a;
 };
-export const searchPhone = (dato: any, id: number) => {
-  
-  const phones = dato["data"];
-  // console.log(users);
-  // console.log(dato["data"]); 
-  
-  let ids = new Array();
-  phones.forEach((element:any) => {
-    if (element.phone) {
-      // console.log(element,email);
-      ids.push(element.phone);
-    }
-  });
-  const a = ids.includes(id);
-  // console.log(a);
-  return a;
+
+
+
+
+
+export const search = (dato: any, option: Record<any,any>) => {
+  const optionsvalue = Object.keys(option);
+  return dato["data"].find((v:any)=>v[optionsvalue[0]] === option[optionsvalue[0]]) ? true : false;
 };

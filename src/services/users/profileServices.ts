@@ -1,6 +1,6 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 import { createNewUser, getUsers } from "../users/userService";
-import { searchId, searchIduser, searchPhone } from "../../helpers/index";
+import { searchId, searchIduser, search  } from "../../helpers/index";
 const prisma = new PrismaClient();
 
 export const getProfile = async (dato: number) => {
@@ -63,10 +63,10 @@ export const createNewProfile = async (dato: any) => {
     const user = await getUsers();
     
     //Buscar los elementos
-    const validateId = await searchIduser(profiles, dato.id);
-    const validatPhone = await searchPhone(profiles, dato.phone);
+    const validateId = await search(profiles, {id:dato.id});
+    const validatPhone = await search(profiles, {phone:dato.phone});
     const validateUsers = await searchId(user, dato.userId);
-
+console.log(validateId)
     //Validate SI el usuario existe 
     if (validateUsers) {
       if (validateId) {
@@ -76,12 +76,12 @@ export const createNewProfile = async (dato: any) => {
         };
       }
 
-      if (validatPhone) {
-        return {
-          status: 200,
-          message: `El telefono ya esta registrado en otro perfil`,
-        };
-      }
+      // if (validatPhone) {
+      //   return {
+      //     status: 200,
+      //     message: `El telefono ya esta registrado en otro perfil`,
+      //   };
+      // }
 
       const profile = await prisma.profile.create({
         data: {
