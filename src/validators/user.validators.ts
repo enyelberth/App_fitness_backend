@@ -11,8 +11,7 @@ class UserValidator {
   public validateUser = [
     body("id").notEmpty().withMessage("Id is required"),
     body("id").isNumeric().withMessage("id is type INT"),
-    body("name").isString().withMessage("Name is type String"),
-    body("name").notEmpty().withMessage("Name is required"),
+
     body("email").notEmpty().withMessage("Email is required"),
     body("email").isEmail().withMessage("The Email is type email required"),
     body("username").notEmpty().withMessage("Username is required"),
