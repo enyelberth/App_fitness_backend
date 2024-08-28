@@ -9,29 +9,18 @@ import {
 
 class ProfileValidator {
   public validateProfile = [
-    
-    
-    body("userId").notEmpty().withMessage("Id is required"),
-    body("userId").isNumeric().withMessage("id is type INT"),
-
-    body("firstName").notEmpty().withMessage("Email is required"),
-    body("firstName").isEmail().withMessage("The Email is type email required"),
-   
-    body("lastName").notEmpty().withMessage("Email is required"),
-    body("lastName").isEmail().withMessage("The Email is type email required"),
-    
-    
-    body("dob").notEmpty().withMessage("Email is required"),
-    body("dob").isEmail().withMessage("The Email is type email required"),
-   
-    
-        
-    body("address").notEmpty().withMessage("Email is required"),
-    body("address").isEmail().withMessage("The Email is type email required"),
-   
-    body("phone").notEmpty().withMessage("Email is required"),
-    body("phone").isEmail().withMessage("The Email is type email required"),
-   
+    body("userId").notEmpty().withMessage("userId is required"),
+    body("userId").isNumeric().withMessage("userId is type number"),
+    body("firstName").notEmpty().withMessage("firstName is required"),
+    body("firstName").isString().withMessage("firstName is type String"),
+    body("lastName").notEmpty().withMessage("lastName is required"),
+    body("lastName").isString().withMessage("lastName is type String"),
+    body("dob").notEmpty().withMessage("dob is required"),
+    body("dob").isDate().withMessage("dob is type dateTime"),
+    body("address").notEmpty().withMessage("address is required"),
+    body("address").isString().withMessage("address is type String"),
+    body("phone").notEmpty().withMessage("phone is required"),
+    body("phone").isNumeric().withMessage("phone is type number"),
   ];
 
 
