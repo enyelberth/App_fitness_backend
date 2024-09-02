@@ -24,12 +24,10 @@ class ProfileValidator {
   ];
 
   verifyId = (req: Request, res: Response, next: NextFunction) => {
-  
     const result = validationResult(req);
     if (result.isEmpty()) next();
     else res.status(401).json(result);
-  
-};
+  };
 }
 
 export { ProfileValidator };

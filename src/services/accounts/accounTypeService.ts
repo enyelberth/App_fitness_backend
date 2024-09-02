@@ -70,6 +70,8 @@ export const createNewAccountType = async (dato: any) => {
       status: 200,
       data: user,
     };
+ 
+ 
   } catch (error) {
     return {
       message: `Error contacte con el administrador`,
