@@ -28,12 +28,12 @@ export const CreateNewAccountType = async (req: Request, res: Response) => {
   const dato = req.body;
 
   const {status,message,data} = await createNewAccountType(dato);
-
+    
   res.status(status).json({
     message,
     data
   });
-  
+
 };
 
 export const DeleteAccountType = async (req: Request, res: Response) => {

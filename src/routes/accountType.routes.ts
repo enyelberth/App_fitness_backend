@@ -3,6 +3,7 @@ import Router, { Request, Response } from "express";
 import {
   GetAccountsTypes,
   CreateNewAccountType,
+  GetAccountType,
 } from "../controllers/accounTypeController";
 
 // const product = require("../../controllers/productController");
@@ -10,9 +11,7 @@ const router = Router();
 
 router.get("/", GetAccountsTypes);
 
-// router.get("/:cliente", (_req: Request, res: Response) => {
-//   res.send("Hola esyo ess");
-// });
+router.get("/:cliente",GetAccountType);
 
 router.post("/", CreateNewAccountType);
 // router.delete("/", DeleteUser);
