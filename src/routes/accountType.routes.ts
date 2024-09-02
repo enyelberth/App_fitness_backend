@@ -1,15 +1,14 @@
 import Router, { Request, Response } from "express";
-import { GetUsers, CreateNewUser, DeleteUser } from "../controllers/userController";
 
 import {
-  GetAccountsType,
+  GetAccountsTypes,
   CreateNewAccountType,
 } from "../controllers/accounTypeController";
 
 // const product = require("../../controllers/productController");
 const router = Router();
 
-router.get("/", GetAccountsType);
+router.get("/", GetAccountsTypes);
 
 // router.get("/:cliente", (_req: Request, res: Response) => {
 //   res.send("Hola esyo ess");

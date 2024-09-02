@@ -1,3 +1,4 @@
+
 import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -12,12 +13,14 @@ export const getAccountsTypes = async () => {
         message: `No se encontraron tipos de cuentas registradas`,
         data: account,
       };
+    }else{
+      return {
+        message: `Tipos de Cuentas encontradas exitoxamente`,
+        data: account,
+        status: 200
+      }
     }
-    return {
-      status: 200,
-      message: `Tipos de Cuentas encontradas exitoxamente`,
-      data: account,
-    };
+    
   } catch (error) {
     return {
       status: 500,

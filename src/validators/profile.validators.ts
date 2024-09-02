@@ -23,9 +23,8 @@ class ProfileValidator {
     body("phone").isNumeric().withMessage("phone is type number"),
   ];
 
-
   verifyId = (req: Request, res: Response, next: NextFunction) => {
-    
+  
     const result = validationResult(req);
     if (result.isEmpty()) next();
     else res.status(401).json(result);
