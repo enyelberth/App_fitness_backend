@@ -11,7 +11,7 @@ const router = Router();
 // router.post("/", CreateNewAccount);
 // router.put("/", UpdateAccount);
 // router.delete("/", DeleteUser);
-// router.patch("/:cliente", (_req: Request, res: Response) => {
+// router.patch("/:cliente", (_req: Request, res: Response) => {s
 //   res.send("Update an existing workout");
 // });
 
