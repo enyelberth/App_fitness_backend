@@ -4,8 +4,12 @@ import { searchEmail, searchId, searchUsername } from "../../helpers/index";
 const prisma = new PrismaClient();
 
 export const getUsers = async () => {
+  // El try cash lo qye hace es que no capta cualquier error que tengamos para que no se rompa 
   try {
+// Funciones que ara nuestro programa en caso de que todo salga bien 
+    
     const user = await prisma.user.findMany();
+    //Validamos que lo que nos traiga la base de datos tenga algo aunquesea un primer usuario 
     if (user.length == 0) {
       return {
         message: `No hay usuarios encontrados`,
@@ -19,6 +23,7 @@ export const getUsers = async () => {
       data: user,
     };
   } catch (error) {
+    //Funcion que ara nuestro programa en caso de que se rompa le pasamos el paramtro errir y lo podemos retornar ak controller y mostrar por un console.log  
     console.log(error);
     return {
       message: `Contacte al administrador: error`,
@@ -28,6 +33,9 @@ export const getUsers = async () => {
 };
 
 export const getUser = async (dato: number) => {
+
+
+  //Usamos el try cash para captar cualquier error que tengamos y lo que podemos observar es que instancemos prisma y los usamos y accedemos a los datos que tenemos en la base de datos 
   try {
     const user = await prisma.user.findMany({
       where: {
@@ -49,6 +57,7 @@ export const getUser = async (dato: number) => {
     };
   } catch (error) {
     console.log(error);
+    //Usamos el template script para imprimir los errores o comillas inglesS 
     return {
       message: `Contacte con el administrador se encontror el error: ${error}`,
       status: 500,
