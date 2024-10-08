@@ -1,10 +1,10 @@
 import Router, { Request, Response } from "express";
-// import { CreateNewAccount,GetAccounts,GetAccount,UpdateAccount } from "../controllers/accountController";
+import { CreateNewAccount,GetAccounts,GetAccount,UpdateAccount } from "../controllers/accountController";
 // import { getAccount } from "../services/accounts/accountService";
 // const product = require("../../controllers/productController");
 const router = Router();
 
-// router.get("/", GetAccounts);
+router.get("/", GetAccounts);
 // router.get("/", GetAccount);
 // router.get("/:id",GetAccount);
 

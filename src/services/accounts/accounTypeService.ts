@@ -1,4 +1,3 @@
-
 import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -13,14 +12,13 @@ export const getAccountsTypes = async () => {
         message: `No se encontraron tipos de cuentas registradas`,
         data: account,
       };
-    }else{
+    } else {
       return {
         message: `Tipos de Cuentas encontradas exitoxamente`,
         data: account,
-        status: 200
-      }
+        status: 200,
+      };
     }
-    
   } catch (error) {
     return {
       status: 500,
@@ -58,7 +56,6 @@ export const getAccountsType = async (dato: any) => {
 
 export const createNewAccountType = async (dato: any) => {
   try {
-
     const user = await prisma.accountType.create({
       data: {
         name: dato.name,
@@ -70,12 +67,25 @@ export const createNewAccountType = async (dato: any) => {
       status: 200,
       data: user,
     };
- 
- 
   } catch (error) {
     return {
       message: `Error contacte con el administrador`,
       status: 500,
+    };
+  }
+};
+
+export const updateAccountType = async (dato: any) => {
+  try {
+    const accountType = await prisma.accountType.create({
+      data: {
+        name: dato.name,
+      },
+    });
+  } catch (error) {
+    return {
+      message: `Error contanct con el administrador`,
+      stattus: 500,
     };
   }
 };

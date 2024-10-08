@@ -23,8 +23,6 @@ export const GetUser = async (req: Request, res: Response) => {
   const { data, status, message } = await getUser(parseInt(cliente));
   //Retornamos los datos un mensaje y un status 
   return res.status(status).json({
-    message,
-    data,
   });
   
 };

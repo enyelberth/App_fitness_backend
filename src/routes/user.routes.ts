@@ -10,23 +10,8 @@ import { UserValidator } from "../validators";
 import { Login } from "../auth/authControllers";
 const router = Router();
 const userValidator = new UserValidator();
-//Obtener todos los  usuarios 
-router.get("/",GetUsers);
-// Validar lo que envia el usuario
-//router.get("/",...userValidator.validateUser, userValidator.verifyId, GetUsers);
-//Obtener un usuario
-router.get("/:cliente",GetUser);
-//Crear usn usuario
-router.post("/",CreateNewUser);
-
-
-// router.delete("/:cliente", DeleteUser);
-// router.post("/", userValidator.validateUser ,CreateNewUser);
-// router.patch("/:cliente", (_req: Request, res: Response) => {
-//   res.send("Update an existing workout");
-// });
-// router.delete("/:cliente", (_req: Request, res: Response) => {
-//   res.send("Delete an existing workout");
-// });
+router.get("/", GetUsers);
+router.get("/:cliente", GetUser);
+router.post("/", CreateNewUser);
 
 export default router;

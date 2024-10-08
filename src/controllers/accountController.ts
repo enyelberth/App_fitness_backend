@@ -10,8 +10,8 @@ export const GetAccount = async (req: Request, res: Response) => {
   const dato = req.body;
   const {id} = req.params;
   const account = await getAccount(id);
-  // res.send(account);
-  console.log(account);
+  
+  // console.log(account);
   res.send(account);
 };
 
