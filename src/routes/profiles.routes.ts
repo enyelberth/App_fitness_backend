@@ -1,17 +1,13 @@
 import Router, { Request, Response } from "express";
-import { GetUsers, CreateNewUser, DeleteUser } from "../controllers/userController";
-import { CreateNewProfile } from "../controllers/profileController";
-
-// const product = require("../../controllers/productController");
+import {
+  CreateNewProfile,
+  GetProfiles,
+} from "../controllers/profileController";
+import { profileValidator } from "../validators/profile.validators";
 const router = Router();
 
-router.get("/", GetUsers);
-
-// router.get("/:cliente", (_req: Request, res: Response) => {
-//   res.send("Hola esyo ess");
-// });
-
-router.post("/", CreateNewProfile);
+router.get("/", GetProfiles);
+router.post("/",profileValidator.validateProfile.bind(profileValidator) ,CreateNewProfile);
 // router.delete("/", deleteUser);
 // router.patch("/:cliente", (_req: Request, res: Response) => {
 //   res.send("Update an existing workout");

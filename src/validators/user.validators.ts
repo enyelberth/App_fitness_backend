@@ -1,42 +1,29 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  body,
-  query,
-  validationResult,
-  matchedData,
-  checkSchema,
-} from "express-validator";
-
-const signUpCheck = () => {
-    return [
-        body('password').trim().notEmpty().isLength({ min: 6 }),
-        body('cfpassword').trim().custom((value, { req }) => {
-            if (value !== req.body.password) {
-                throw new Error('Las contraseñas no coinciden');
-            }
-            return true;
-        }),
-    ];
-};
+import * as yup from "yup"; 
+// Definición del esquema de validación con Yup
+const userSchema = yup.object().shape({
+  password: yup.string().required("La contraseña es obligatoria."),
+  email: yup.string().email("El email debe ser válido.").required("El email es obligatorio."),
+  username: yup.string().required("El nombre de usuario es obligatorio."),
+  id: yup.number().required("El id es obligatorio."),
+});
 class UserValidator {
-  public validateUser = [
-    body("id").notEmpty().withMessage("Id is required"),
-    body("id").isNumeric().withMessage("id is type INT"),
-
-    body("email").notEmpty().withMessage("Email is required"),
-    body("email").isEmail().withMessage("The Email is type email required"),
-    body("username").notEmpty().withMessage("Username is required"),
-    body("username").isString().withMessage("Username is type String"),
-    body("password").notEmpty().withMessage("Password is required"),
-    body("password").isString().withMessage("Password is type String"),
-  ];
-
-
-  verifyId = (req: Request, res: Response, next: NextFunction) => {
-    const result = validationResult(req);
-    if (result.isEmpty()) next();
-    else res.status(401).json(result);
-  };
+  // Middleware para validar los datos del usuario
+  public async validateUser(req: Request, res: Response, next: NextFunction) {
+    try {
+      // Validar los datos del cuerpo de la solicitud
+      await userSchema.validate(req.body);
+      
+      // Si la validación pasa, se llama a la siguiente función de middleware o controlador
+      next();
+    } catch (error) {
+      // Manejo de errores de validación
+      return res.status(400).json({
+        status: 400,
+        message: `Error en la validación: ${error}`,
+      });
+    }
+  }
 }
 
-export { UserValidator,signUpCheck };
+export const userValidator = new UserValidator();

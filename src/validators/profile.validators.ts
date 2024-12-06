@@ -1,33 +1,28 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  body,
-  query,
-  validationResult,
-  matchedData,
-  checkSchema,
-} from "express-validator";
-
+import * as yup from "yup";
+const profileSchema = yup.object().shape({
+  userId: yup.number().required("El userId es obligatorio."),
+  firstName: yup.string().required("el firstName es obligatorio."),
+  lastName: yup.string().required("El lastName es obligatorio."),
+  dob: yup.date().required("La dob es obligatoria."),
+  address: yup.string().required("La address es obligatoria."),
+  phone: yup.number().required("El phone es obligatorio."),
+});
 class ProfileValidator {
-  public validateProfile = [
-    body("userId").notEmpty().withMessage("userId is required"),
-    body("userId").isNumeric().withMessage("userId is type number"),
-    body("firstName").notEmpty().withMessage("firstName is required"),
-    body("firstName").isString().withMessage("firstName is type String"),
-    body("lastName").notEmpty().withMessage("lastName is required"),
-    body("lastName").isString().withMessage("lastName is type String"),
-    body("dob").notEmpty().withMessage("dob is required"),
-    body("dob").isDate().withMessage("dob is type dateTime"),
-    body("address").notEmpty().withMessage("address is required"),
-    body("address").isString().withMessage("address is type String"),
-    body("phone").notEmpty().withMessage("phone is required"),
-    body("phone").isNumeric().withMessage("phone is type number"),
-  ];
-
-  verifyId = (req: Request, res: Response, next: NextFunction) => {
-    const result = validationResult(req);
-    if (result.isEmpty()) next();
-    else res.status(401).json(result);
-  };
+  public async validateProfile(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      await profileSchema.validate(req.body);
+      next();
+    } catch (error) {
+      return res.status(400).json({
+        status: 400,
+        message: `Error en la validación: ${error}`,
+      });
+    }
+  }
 }
-
-export { ProfileValidator };
+export const profileValidator = new ProfileValidator();

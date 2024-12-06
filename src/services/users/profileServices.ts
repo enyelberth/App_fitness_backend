@@ -59,6 +59,7 @@ export const getProfiles = async () => {
 export const createNewProfile = async (dato: any) => {
   try {
     //Array de datos
+    console.log("Datos de la creacion de perfil");
     const profiles = await getProfiles();
     const user = await getUsers();
     

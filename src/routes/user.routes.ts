@@ -1,21 +1,19 @@
-import Router, { Request, Response } from "express";
+import Router, { NextFunction, Request, Response } from "express";
 import {
   GetUsers,
   CreateNewUser,
   DeleteUser,
   GetUser,
 } from "../controllers/userController";
-import { body, query } from "express-validator";
-import { UserValidator, signUpCheck} from "../validators";
-import { Login } from "../auth/authControllers";
+import { userValidator } from "../validators/user.validators";
 
 const router = Router();
 
-const createEmailChain = () => body('email').isEmail();
-
-// const userValidator = new UserValidator();
-router.get("/", signUpCheck(),GetUsers);
+// Rutas
+router.get("/", GetUsers);
 router.get("/:cliente", GetUser);
-router.post("/", CreateNewUser);
+
+// Ruta para crear un nuevo usuario
+router.post("/", userValidator.validateUser.bind(userValidator), CreateNewUser);
 
 export default router;
