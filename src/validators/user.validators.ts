@@ -7,6 +7,17 @@ import {
   checkSchema,
 } from "express-validator";
 
+const signUpCheck = () => {
+    return [
+        body('password').trim().notEmpty().isLength({ min: 6 }),
+        body('cfpassword').trim().custom((value, { req }) => {
+            if (value !== req.body.password) {
+                throw new Error('Las contraseñas no coinciden');
+            }
+            return true;
+        }),
+    ];
+};
 class UserValidator {
   public validateUser = [
     body("id").notEmpty().withMessage("Id is required"),
@@ -28,4 +39,4 @@ class UserValidator {
   };
 }
 
-export { UserValidator };
+export { UserValidator,signUpCheck };

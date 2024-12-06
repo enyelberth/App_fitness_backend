@@ -1,9 +1,6 @@
 import express from "express";
-// import cors from "cors";
 import { account, accountType, auth, profile, user } from "../routes/index";
-
 const cors = require("cors");
-
 export class Server {
   private app: any;
   private port: string | number;
@@ -22,11 +19,9 @@ export class Server {
       user: this.pre + "/user",
       account: this.pre + "/account",
       accountType: this.pre + "/accountType",
-      profile:this.pre + "/profile",
-      auth:this.pre + "/auth",
+      profile: this.pre + "/profile",
+      auth: this.pre + "/auth",
     };
-
-
     this.middlewares();
     this.routes();
   }
@@ -36,12 +31,12 @@ export class Server {
     this.app.use(express.static("public"));
   }
   routes() {
-    this.app.use(this.paths.auth,auth);
+    this.app.use(this.paths.auth, auth);
     this.app.use(this.paths.user, user);
     this.app.use(this.paths.account, account);
-    this.app.use(this.paths.accountType,accountType);
-    this.app.use(this.paths.profile,profile);
-}
+    this.app.use(this.paths.accountType, accountType);
+    this.app.use(this.paths.profile, profile);
+  }
   listen() {
     this.app.listen(this.port, () => {
       console.log(`Servidor corriendo en localhost : ${this.port}`);
