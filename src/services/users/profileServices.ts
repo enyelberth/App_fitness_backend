@@ -67,7 +67,7 @@ export const createNewProfile = async (dato: any) => {
     const validateId = await search(profiles, {id:dato.id});
     const validatPhone = await search(profiles, {phone:dato.phone});
     const validateUsers = await searchId(user, dato.userId);
-console.log(validateId)
+    console.log(validateId)
     //Validate SI el usuario existe 
     if (validateUsers) {
       if (validateId) {
