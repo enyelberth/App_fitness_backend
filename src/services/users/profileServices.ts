@@ -77,13 +77,6 @@ export const createNewProfile = async (dato: any) => {
         };
       }
 
-      // if (validatPhone) {
-      //   return {
-      //     status: 200,
-      //     message: `El telefono ya esta registrado en otro perfil`,
-      //   };
-      // }
-
       const profile = await prisma.profile.create({
         data: {
           firstName: dato.firstName,
