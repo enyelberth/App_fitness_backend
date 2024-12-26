@@ -1,9 +1,10 @@
 import express,{ Request,Response } from "express";
-import { CreateNewProducto, getProduct } from "../services/productService";
+// import { CreateNewProducto, getProduct } from "../services/productService";
 
+import { getProducts,CreateNewProducto } from "./productService";
 
-export const getProducts = async (_req:Request,res:Response)=>{
-    const user = await getProduct();
+export const GetProducts = async (_req:Request,res:Response)=>{
+    const user = await getProducts();
     res.json(user);
 };
 export const getOneProduct = async(_req:Request,res:Response)=>{

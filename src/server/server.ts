@@ -1,5 +1,5 @@
 import express from "express";
-import { account, accountType, auth, profile, user } from "../routes/index";
+import { account, accountType, auth, binance, paypal, producto, profile, user } from "../routes/index";
 import path from "path";
 // import { version } from "os";
 const cors = require("cors");
@@ -40,10 +40,13 @@ export class Server {
     this.pre = "/api";
     this.paths = {
       user: this.pre + "/user",
+      product: this.pre + "/product",
       account: this.pre + "/account",
       accountType: this.pre + "/accountType",
       profile: this.pre + "/profile",
       auth: this.pre + "/auth",
+      paypal: this.pre + "/paypal",
+      binance: this.pre + "/binance",
       docs: "/docs",
     };
     this.middlewares();
@@ -58,12 +61,16 @@ export class Server {
     this.app.use(this.paths.docs, swaggerUi.serve,swaggerUi.setup(swaggerJsDoc(swaggerSpec)));
     this.app.use(this.paths.auth, auth);
     this.app.use(this.paths.user, user);
+    this.app.use(this.paths.product, producto);
     this.app.use(this.paths.account, account);
     this.app.use(this.paths.accountType, accountType);
     this.app.use(this.paths.profile, profile);
+    this.app.use(this.paths.paypal, paypal);
+    this.app.use(this.paths.binance, binance);
   }
   listen() {
     this.app.listen(this.port, () => {
+      console.clear()
       console.log(`Servidor corriendo en localhost : ${this.port}`);
     });
   }

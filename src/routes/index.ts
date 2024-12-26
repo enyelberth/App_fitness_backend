@@ -1,10 +1,12 @@
 import user from "./user.routes";
-import producto from "./product.routes";
+// import producto from "../modules/products/product.routes";
+import producto from "../modules/products/product.routes"
 import profile from "./profiles.routes";
 import account from "./account.route";
 import accountType from "./accountType.routes";
 import auth  from "./auth.routes";
-// import auth from "../auth/authControllers";
+import paypal from "../paypal/paypal.routes"
+import binance from "../binance/binance.routes"
 
 
 export {
@@ -13,5 +15,7 @@ export {
     profile,
     account,
     accountType,
-    auth
+    auth,
+    paypal,
+    binance
 }

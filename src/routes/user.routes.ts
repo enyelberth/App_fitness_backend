@@ -9,7 +9,6 @@ import { userValidator } from "../validators/user.validators";
 
 const router = Router();
 
-// Rutas
 router.get("/", GetUsers);
 router.get("/:cliente", GetUser);
 

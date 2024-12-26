@@ -22,16 +22,16 @@ model Admin {
 }
 
 model AccountAdmin {
-  id           String             @id
-  userId       String             @unique
-  admin        Admin              @relation(fields: [userId], references: [id])
-  balance      Decimal            @default(0)
-  transactions TransactionAdmin[]
+  id                 String             @id
+  userId             String             @unique
+  admin              Admin              @relation(fields: [userId], references: [id])
+  balance            Decimal            @default(0)
+  transactions       TransactionAdmin[]
   accountTypeAdminId String?
-  AccountTypeAdmin   AccountTypeAdmin? @relation(fields: [accountTypeAdminId], references: [id])
+  AccountTypeAdmin   AccountTypeAdmin?  @relation(fields: [accountTypeAdminId], references: [id])
   currencyId         String?
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
 }
 
 model AccountTypeAdmin {
@@ -50,7 +50,7 @@ model TransactionAdmin {
 }
 
 model User {
-  id           Int         @id // Añadido valor por defecto
+  id           Int            @id // Añadido valor por defecto
   username     String         @unique // Corregido de 'usename' a 'username'
   email        String         @unique
   password     String
@@ -60,47 +60,44 @@ model User {
   Notification Notification[]
   Loan         Loan?
   Profile      Profile[]
-
 }
 
 model Profile {
-  id        Int   @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   firstName String
   lastName  String
   dob       DateTime
   address   String
   phone     String   @unique
-  userId    Int   
+  userId    Int
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Account {
-  id                 String            @id
-  userId             Int
-  user               User              @relation(fields: [userId], references: [id])
-  type               AccountType       @relation(fields: [typeId], references: [id])
-  balance            Decimal           @default(0)
-  
-  transactions       Transaction[]
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt
-  typeId             Int
-  Currency           Currency?         @relation(fields: [currencyId], references: [id])
-  currencyId         String?
- 
+  id      String      @id
+  userId  Int
+  user    User        @relation(fields: [userId], references: [id])
+  type    AccountType @relation(fields: [typeId], references: [id])
+  balance Decimal     @default(0)
+
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  typeId       Int
+  Currency     Currency?     @relation(fields: [currencyId], references: [id])
+  currencyId   String?
 }
 
 model AccountType {
-  id           Int         @id @default(autoincrement())
-  name         String
-  accounts     Account[]
- 
+  id       Int       @id @default(autoincrement())
+  name     String
+  accounts Account[]
 }
 
 model Transaction {
-   id        Int   @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   accountId String
   account   Account  @relation(fields: [accountId], references: [id])
   amount    Decimal
@@ -109,14 +106,13 @@ model Transaction {
 }
 
 model Currency {
-  id           String         @id @default(uuid())
-  name         String
-  symbol       String
-  loans        Loan[]
-  accounts     Account[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-
+  id        String    @id @default(uuid())
+  name      String
+  symbol    String
+  loans     Loan[]
+  accounts  Account[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Notification {
@@ -132,7 +128,7 @@ model Notification {
 
 model Loan {
   id           String   @id @default(uuid())
-  userId       Int   @unique
+  userId       Int      @unique
   user         User     @relation(fields: [userId], references: [id])
   amount       Decimal
   interestRate Decimal
@@ -143,22 +139,13 @@ model Loan {
   updatedAt    DateTime @updatedAt
 }
 
-model Product {
-  id        Int      @id @default(autoincrement())
-  title     String   @db.VarChar(255)
-  price     String   @db.VarChar(255)
-  cantidad  Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 model auth {
   id       Int    @id
   usename  String
   password String
 }
-//
 
+//
 
 model Ingresos {
   id          Int        @id @default(autoincrement())
@@ -212,4 +199,38 @@ model Categorias {
 enum Type {
   Gasto
   Ganancias
+}
+
+model Product {
+  id                Int                  @id @default(autoincrement())
+  title             String               @db.VarChar(255)
+  price             String               @db.VarChar(255)
+  quantity          Int
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+
+
+
+  categoryProductId Int
+  subCategoryProductId Int
+    
+  category  CategoryProduct  @relation(fields: [categoryProductId], references: [id])
+  subCategory  SubCategoryProduct  @relation(fields: [subCategoryProductId], references: [id])
+}
+
+model CategoryProduct {
+  id        Int      @id()
+  name      String   @db.VarChar(255)
+  productos Product[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+}
+
+model SubCategoryProduct {
+  id        Int       @id()
+  name      String    @db.VarChar(255)
+  productId   Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }

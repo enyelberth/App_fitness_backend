@@ -1,15 +1,15 @@
 import Router,{ Request,Response } from "express";
 
-const product = require("../controllers/productController");
+import { GetProducts } from "./productController";
 const router = Router();
 
-router.get("/", product.getProducts);
+router.get("/", GetProducts);
 
 router.get("/:cliente", (_req: Request, res: Response) => {
   res.send("Hola esyo ess");
 });
 
-router.post("/",product.createNewProduct);
+// router.post("/",product.createNewProduct);
 
 router.patch("/:cliente", (_req: Request, res: Response) => {
   res.send("Update an existing workout");
