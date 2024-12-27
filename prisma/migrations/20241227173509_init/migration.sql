@@ -152,11 +152,86 @@ CREATE TABLE `Loan` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `auth` (
+    `id` INTEGER NOT NULL,
+    `usename` VARCHAR(191) NOT NULL,
+    `password` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Ingresos` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `fecha` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `description` VARCHAR(191) NOT NULL,
+    `monto` DOUBLE NOT NULL,
+    `categoriaId` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `IngresoFijos` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `fecha` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `description` VARCHAR(191) NOT NULL,
+    `monto` DOUBLE NOT NULL,
+    `categoriaId` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Gasto` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `fecha` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `description` VARCHAR(191) NOT NULL,
+    `monto` DOUBLE NOT NULL,
+    `categoriaId` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `GastoFijo` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `fecha` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `description` VARCHAR(191) NOT NULL,
+    `monto` DOUBLE NOT NULL,
+    `categoriaId` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Categorias` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `type` ENUM('Gasto', 'Ganancias') NOT NULL DEFAULT 'Ganancias',
+    `fecha` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `Product` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(255) NOT NULL,
     `price` VARCHAR(255) NOT NULL,
-    `cantidad` INTEGER NOT NULL,
+    `quantity` INTEGER NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `categoryProductId` INTEGER NOT NULL,
+    `subCategoryProductId` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `CategoryProduct` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -164,10 +239,11 @@ CREATE TABLE `Product` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `auth` (
-    `id` INTEGER NOT NULL,
-    `usename` VARCHAR(191) NOT NULL,
-    `password` VARCHAR(191) NOT NULL,
+CREATE TABLE `SubCategoryProduct` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -204,3 +280,21 @@ ALTER TABLE `Loan` ADD CONSTRAINT `Loan_userId_fkey` FOREIGN KEY (`userId`) REFE
 
 -- AddForeignKey
 ALTER TABLE `Loan` ADD CONSTRAINT `Loan_currencyId_fkey` FOREIGN KEY (`currencyId`) REFERENCES `Currency`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Ingresos` ADD CONSTRAINT `Ingresos_categoriaId_fkey` FOREIGN KEY (`categoriaId`) REFERENCES `Categorias`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `IngresoFijos` ADD CONSTRAINT `IngresoFijos_categoriaId_fkey` FOREIGN KEY (`categoriaId`) REFERENCES `Categorias`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Gasto` ADD CONSTRAINT `Gasto_categoriaId_fkey` FOREIGN KEY (`categoriaId`) REFERENCES `Categorias`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `GastoFijo` ADD CONSTRAINT `GastoFijo_categoriaId_fkey` FOREIGN KEY (`categoriaId`) REFERENCES `Categorias`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Product` ADD CONSTRAINT `Product_categoryProductId_fkey` FOREIGN KEY (`categoryProductId`) REFERENCES `CategoryProduct`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Product` ADD CONSTRAINT `Product_subCategoryProductId_fkey` FOREIGN KEY (`subCategoryProductId`) REFERENCES `SubCategoryProduct`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

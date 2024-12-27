@@ -219,7 +219,7 @@ model Product {
 }
 
 model CategoryProduct {
-  id        Int      @id()
+  id        Int      @id @default(autoincrement())
   name      String   @db.VarChar(255)
   productos Product[]
   createdAt DateTime @default(now())
@@ -228,7 +228,7 @@ model CategoryProduct {
 }
 
 model SubCategoryProduct {
-  id        Int       @id()
+  id        Int       @id @default(autoincrement())
   name      String    @db.VarChar(255)
   productId   Product[]
   createdAt DateTime  @default(now())
