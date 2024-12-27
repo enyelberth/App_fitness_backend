@@ -5,7 +5,7 @@ const router = Router();
 
 router.get("/", GetProducts);
 
-router.get("/:cliente", (_req: Request, res: Response) => {
+router.get("/:product", (_req: Request, res: Response) => {
   res.send("Hola esyo ess");
 });
 

@@ -1,10 +1,11 @@
 import express,{ Request,Response } from "express";
 // import { CreateNewProducto, getProduct } from "../services/productService";
 
-import { getProducts,CreateNewProducto } from "./productService";
+import {ProductService} from "./productService";
 
 export const GetProducts = async (_req:Request,res:Response)=>{
-    const user = await getProducts();
+    const dato = new ProductService()
+    const user = await dato.getProducts();
     res.json(user);
 };
 export const getOneProduct = async(_req:Request,res:Response)=>{
@@ -15,10 +16,10 @@ export const createNewProduct = async (req:Request,res:Response)=>{
     // console.log(req.body.title)
     const dato = req.body;
     // console.log(dato);
-    const user = await CreateNewProducto(dato);
+    // const user = await CreateNewProducto(dato);
     // res.send(dato);
    
-    res.send(user);
+    // res.send(user);
     console.log("Se registro correctamente a ${user.}");
 };
 export const updateProduct = ()=>{
