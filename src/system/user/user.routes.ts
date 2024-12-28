@@ -4,8 +4,8 @@ import {
   CreateNewUser,
   DeleteUser,
   GetUser,
-} from "../controllers/userController";
-import { userValidator } from "../validators/user.validators";
+} from "./userController";
+import { userValidator } from "../../validators/user.validators";
 
 const router = Router();
 

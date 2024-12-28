@@ -1,13 +1,6 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 
-interface Product {
-  title: string;
-  description: string;
-  price: number;
-  quantity: number;
-  categoryProductId?: number;
-  subCategoryProductId?: number;
-}
+
 
 export class ProductService {
   prisma: PrismaClient;
@@ -50,19 +43,35 @@ export class ProductService {
       };
     }
   }
-  async createNewProduct(product: Product) {
-    const producto = await this.prisma.product.create({
-      data: {
-        title: product.title,
-        price: parseInt(product.price),
-        quantity: product.quantity,
-        categoryProductId: product.categoryProductId,
-        subCategoryProductId: product.subCategoryProductId,
-      },
-    });
-    return {
-      status: 200,
-      data: producto,
-    };
+  async createNewProduct(product: any) {
+    try {
+      if (!product.title || !product.description || !product.price || !product.quantity || !product.categoryProductId || !product.subCategoryProductId) {
+        return {
+          status: 400,
+          data: "Todos los campos son requeridos",
+        };
+      }
+
+      const producto = await this.prisma.product.create({
+        data: {
+          title: String(product.title),
+          description: String(product.description),
+          price: Number(product.price),
+          quantity: Number(product.quantity),
+          categoryProductId: Number(product.categoryProductId),
+          subCategoryProductId: Number(product.subCategoryProductId),
+        },
+      });
+
+      return {
+        status: 200,
+        data: producto,
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        data: `Error ${error} contacte con el administrador`,
+      };
+    }
   }
 }

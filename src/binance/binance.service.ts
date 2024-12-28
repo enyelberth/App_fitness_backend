@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Binance from 'binance-api-node';
+// import Binance from 'binance-api-node';
 
 const binance_key = process.env.BINANCE_API_CLIENT;
 const binance_secret = process.env.BINANCE_API_SECRET;

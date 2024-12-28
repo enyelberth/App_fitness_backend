@@ -204,7 +204,8 @@ enum Type {
 model Product {
   id                Int                  @id @default(autoincrement())
   title             String               @db.VarChar(255)
-  price             String               @db.VarChar(255)
+  description       String
+  price             Float               
   quantity          Int
   createdAt         DateTime             @default(now())
   updatedAt         DateTime             @updatedAt

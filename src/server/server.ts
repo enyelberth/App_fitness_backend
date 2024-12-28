@@ -1,5 +1,5 @@
 import express from "express";
-import { account, accountType, auth, binance, paypal, producto, profile, user } from "../routes/index";
+import { account, accountType, auth, binance, categoryProduct, paypal, producto, profile, subcategoryProuct, user } from "../routes/index";
 import path from "path";
 // import { version } from "os";
 const cors = require("cors");
@@ -41,6 +41,8 @@ export class Server {
     this.paths = {
       user: this.pre + "/user",
       product: this.pre + "/product",
+      productCategory: this.pre + "/productCategory",
+      subCategoryProduct: this.pre + "/subCategoryProduct",
       account: this.pre + "/account",
       accountType: this.pre + "/accountType",
       profile: this.pre + "/profile",
@@ -62,6 +64,8 @@ export class Server {
     this.app.use(this.paths.auth, auth);
     this.app.use(this.paths.user, user);
     this.app.use(this.paths.product, producto);
+    this.app.use(this.paths.productCategory, categoryProduct);
+    this.app.use(this.paths.subCategoryProduct, subcategoryProuct);
     this.app.use(this.paths.account, account);
     this.app.use(this.paths.accountType, accountType);
     this.app.use(this.paths.profile, profile);

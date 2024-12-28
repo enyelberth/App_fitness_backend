@@ -7,7 +7,7 @@ const secret = process.env.SECRET;
 export const Login = async (req: Request,res: Response,next: NextFunction) => {
   const datos = req.body;
 
-  const { status, message, token } = await login(datos);
+  const { status, message, token } = await login(datos.username, datos.password);
 
   res.status(status).json({
     message,

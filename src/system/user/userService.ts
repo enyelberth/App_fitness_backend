@@ -135,3 +135,61 @@ export const deleteUser = async (dato: number) => {
     };
   }
 };
+export const validateUser = async (username: string) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        username: username,
+      },
+    });
+
+    if (user) {
+      return {
+        message: `Usuario encontrado`,
+        status: 200,
+        data: user,
+      };
+    } else {
+      return {
+        message: `Usuario no encontrado`,
+        status: 404,
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      message: `Error contacte con el administrador`,
+      status: 500,
+    };
+  }
+};
+
+export const validatePassword = async (username: string, password: string) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        username: username,
+      },
+    });
+
+    if (user && user.password === password) {
+      return {
+        message: `Contraseña válida`,
+        status: 200,
+        password: true
+      };
+    } else {
+      return {
+        message: `Contraseña incorrecta`,
+        status: 401,
+        password: false
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      message: `Error contacte con el administrador`,
+      status: 500,
+    };
+  }
+};

@@ -1,13 +1,11 @@
 import Router,{ Request,Response } from "express";
 
-import { GetProducts } from "./productController";
+import { CreateNewProduct, GetProducts } from "./productController";
 const router = Router();
 
 router.get("/", GetProducts);
 
-router.get("/:product", (_req: Request, res: Response) => {
-  res.send("Hola esyo ess");
-});
+router.post("/",CreateNewProduct);
 
 // router.post("/",product.createNewProduct);
 

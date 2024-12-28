@@ -4,7 +4,7 @@ import {
   getUsers,
   deleteUser,
   getUser,
-} from "../services/users/userService";
+} from "./userService";
 
 export const GetUsers = async (req: Request, res: Response) => {
   console.log("obteniendo usuario");
