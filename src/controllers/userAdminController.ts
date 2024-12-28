@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { createNewUserAdmin, getUsersAdmin, deleteUSer } from "./userAdminServices";
+import { createNewUserAdmin, getUsersAdmin, deleteUSer } from "../services/userAdminServices"
 
 export const GetUsers = async (req: Request, res: Response) => {
   const user = await getUsersAdmin();

@@ -1,0 +1,27 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.binance = exports.paypal = exports.accountType = exports.account = exports.profile = exports.subcategoryProuct = exports.categoryProduct = exports.producto = exports.auth = exports.user = void 0;
+const user_routes_1 = __importDefault(require("../system/user/user.routes"));
+exports.user = user_routes_1.default;
+// import producto from "../modules/products/product.routes";
+const product_routes_1 = __importDefault(require("../modules/products/product.routes"));
+exports.producto = product_routes_1.default;
+const profiles_routes_1 = __importDefault(require("./profiles.routes"));
+exports.profile = profiles_routes_1.default;
+const account_route_1 = __importDefault(require("./account.route"));
+exports.account = account_route_1.default;
+const accountType_routes_1 = __importDefault(require("./accountType.routes"));
+exports.accountType = accountType_routes_1.default;
+const auth_routes_1 = __importDefault(require("./auth.routes"));
+exports.auth = auth_routes_1.default;
+const paypal_routes_1 = __importDefault(require("../paypal/paypal.routes"));
+exports.paypal = paypal_routes_1.default;
+const binance_routes_1 = __importDefault(require("../binance/binance.routes"));
+exports.binance = binance_routes_1.default;
+const category_routes_1 = __importDefault(require("../modules/products/categoryProduct/category.routes"));
+exports.categoryProduct = category_routes_1.default;
+const subcategory_routes_1 = __importDefault(require("../modules/products/subCategoryProduct/subcategory.routes"));
+exports.subcategoryProuct = subcategory_routes_1.default;
