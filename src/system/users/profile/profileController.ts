@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import {
   createNewProfile,
   getProfiles,
-} from "../services/users/profileServices";
+} from "../profile/profileServices";
 
 export const GetProfiles = async (req: Request, res: Response) => {
   const { data, status, message } = await getProfiles();

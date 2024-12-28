@@ -1,5 +1,5 @@
 import { PrismaClient, Prisma } from "@prisma/client";
-import { searchEmail, searchId, searchUsername } from "../../helpers/index";
+import { searchEmail, searchId, searchUsername } from "../../helpers/index"
 
 const prisma = new PrismaClient();
 

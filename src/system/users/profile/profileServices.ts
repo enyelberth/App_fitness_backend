@@ -1,6 +1,6 @@
 import { PrismaClient, Prisma } from "@prisma/client";
-import { createNewUser, getUsers } from "../../system/user/userService";
-import { searchId, searchIduser, search  } from "../../helpers/index";
+import { createNewUser, getUsers } from "../../users/userService";
+import { searchId, searchIduser, search  } from "../../../helpers/index";
 const prisma = new PrismaClient();
 
 export const getProfile = async (dato: number) => {

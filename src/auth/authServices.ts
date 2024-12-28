@@ -1,4 +1,4 @@
-import { validatePassword, validateUser } from "../system/user/userService";
+import { validatePassword, validateUser } from "../system/users/userService";
 // import bcrypt from 'bcrypt';
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");

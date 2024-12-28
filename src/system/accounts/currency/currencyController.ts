@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { getcurrencys } from "../services/accounts/currencyService";
+import { getcurrencys } from "../system/accounts/accounts/currencyService";
 
 export const GetCurrency = (req:Request,res:Response)=>{ 
     

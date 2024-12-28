@@ -2,8 +2,8 @@ import Router, { Request, Response } from "express";
 import {
   CreateNewProfile,
   GetProfiles,
-} from "../controllers/profileController";
-import { profileValidator } from "../validators/profile.validators";
+} from "../profile/profileController";
+import { profileValidator } from "../../../validators/profile.validators";
 const router = Router();
 
 router.get("/", GetProfiles);

@@ -2,8 +2,8 @@ import express, { Request, Response } from "express";
 import {
   createNewAccountType,
   getAccountsTypes,
-} from "../services/accounts/accounTypeService";
-import { GetAccount } from "./accountController";
+} from "./accounTypeService";
+import { GetAccount } from "../accountController";
 
 export const GetAccountsTypes = async (req: Request, res: Response) => {
   const { data, status, message } = await getAccountsTypes();
