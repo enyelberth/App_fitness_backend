@@ -28,6 +28,27 @@ export const getcurrencys = async () => {
 };
 export const getcurrency = async () => {};
 
-export const createcurrrency = async () => {};
+export const createcurrrency = async (data:any) => {
+  try {
+    console.log("asdas")
+    const currency = await prisma.currency.create({
+      data: {
+        name: data.name,
+        symbol: data.symbol,
+      },
+    });
+
+    return {
+      message: `Currency creada exitosamente`,
+      status: 200,
+      data: currency,
+    };
+  } catch (error) {
+    return {
+      message: `Error contacte con el administrador`,
+      status: 500,
+    };
+  }
+};
 export const updateCurrency = async () => {};
 export const deleteCurrency = async () => {};

@@ -18,9 +18,12 @@ export const GetAccount = async (req: Request, res: Response) => {
 export const CreateNewAccount = async (req: Request, res: Response) => {
   const dato = req.body;
 
-  const account = await createNewAccount(dato);
+  const {data,status,message} = await createNewAccount(dato);
   console.log("La cuenta fue registrada con exito");
-  res.send(account);
+  res.status(status).json({
+    message,
+    data,
+  });
 };
 
 export const UpdateAccount = async (req: Request, res: Response) => {

@@ -61,51 +61,29 @@ export const getAccounts = async () => {
  };
 
  export const createNewAccount = async (dato: any) => {
-    const users = await getUsers();
-    // const typeAccount = await getAccountsType();
-
-   const AccountId = await getAccounts();
-   const AccountIdArray = new Array();
-   const idUser = new Array();
-   const idTypeaccount = new Array();
-   const datos = dato;
-   const id2 = dato.userId;
-   const id3 = dato.typeId;
-   const id4 = dato.id;
-   // users.forEach((element) => {
-   //   if (element.id) {
-   //     idUser.push(element.id);
-   //   }
-   // });
-   // typeAccount.forEach((element) => {
-   //   if (element.id) {
-   //     idTypeaccount.push(element.id);
-   //   }
-   // });
-   // AccountId.forEach((element) => {
-   //   if (element.id) {
-   //     AccountIdArray.push(element.id);
-   //   }
-   // });
-   const date = idUser.includes(id2);
-   const date2 = idTypeaccount.includes(id3);
-   const date3 = AccountIdArray.includes(id4);
-   if (!date3 && date && date2) {
-     const user = await prisma.account.create({
-       data: {
-         id: datos.id,
-         userId: datos.userId,
-         typeId: datos.typeId,
-       },
-     });
-     return user;
-   } else if (!date) {
-     return "El usuario no esta registrado";
-   } else if (!date2) {
-     return "la type de cuenta no esta registrado";
-   } else if (date3) {
-     return "El numero de cuenta ya esta utilazado";
-   }
+  try {
+    const datos = dato;
+    console.log(datos);
+    const account = await prisma.account.create({
+      data: {
+        id: datos.id,
+        userId: parseInt(datos.userId),
+        currencyId: datos.currencyId,
+        typeId: parseInt(datos.accountTypeId),
+      },
+    });
+    return {
+      status:200,
+      data:account,
+      message:"La cuenta fue creada exitosamente"
+    };
+  } catch (error) {
+    return {
+      status:500,
+      message:`Error contacte con el administrador ${error}`,
+      data: ""
+    }
+  }
  };
  export const updateAccount = async (dato: any) => {
    const datos = dato;

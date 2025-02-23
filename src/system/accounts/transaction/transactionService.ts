@@ -2,18 +2,53 @@ import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const getTransaction = () => {};
+export const getTransactions = async () => {
+  try {
+    const currencys = await prisma.currency.findMany();
 
-const getTransactions = (id: any) => {};
-const createTransaction = async (dato: any) => {
-  const datos = dato.body;
-
-  // const transaction = await prisma.transaction.create({
-  //   data: {
-  //     id: "1",
-  //     account: "asdas",
-  //     amount: 19,
-  //     type: 1,
-  //   },
-  // });
+    if (currencys.length == 0) {
+      return {
+        message: `No se encontraron currencys registradas `,
+        status: 200,
+        data: currencys,
+      };
+    } else {
+      return {
+        message: `Currencys encontradas exitozamente`,
+        status: 200,
+        data: currencys,
+      };
+    }
+  } catch (error) {
+    return {
+      message: `Error contacte con el administrador`,
+      status: 500,
+    };
+  }
 };
+export const getcurrency = async () => {};
+
+export const createTransaction = async (data:any) => {
+  try {
+    console.log("asdas")
+    const currency = await prisma.currency.create({
+      data: {
+        name: data.name,
+        symbol: data.symbol,
+      },
+    });
+
+    return {
+      message: `Currency creada exitosamente`,
+      status: 200,
+      data: currency,
+    };
+  } catch (error) {
+    return {
+      message: `Error contacte con el administrador`,
+      status: 500,
+    };
+  }
+};
+export const updateCurrency = async () => {};
+export const deleteCurrency = async () => {};

@@ -8,7 +8,7 @@ router.get("/", GetAccounts);
 // router.get("/", GetAccount);
 // router.get("/:id",GetAccount);
 
-// router.post("/", CreateNewAccount);
+router.post("/", CreateNewAccount);
 // router.put("/", UpdateAccount);
 // router.delete("/", DeleteUser);
 // router.patch("/:cliente", (_req: Request, res: Response) => {s
