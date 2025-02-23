@@ -13,6 +13,7 @@ export const GetTransactions = async (req:Request,res:Response)=>{
 
     return res.status(status).json({
         message,
+        data,
         status
     });
 }

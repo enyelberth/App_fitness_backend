@@ -1,20 +1,21 @@
 import { PrismaClient, Prisma } from "@prisma/client";
+import { transaction } from "../../../routes";
 
 const prisma = new PrismaClient();
 
 export const getTransactions = async () => {
   try {
-    const currencys = await prisma.currency.findMany();
+    const currencys = await prisma.transaction.findMany();
 
     if (currencys.length == 0) {
       return {
-        message: `No se encontraron currencys registradas `,
+        message: `No se encontraron transaction registradas `,
         status: 200,
         data: currencys,
       };
     } else {
       return {
-        message: `Currencys encontradas exitozamente`,
+        message: `Transaction encontradas exitozamente`,
         status: 200,
         data: currencys,
       };
@@ -30,14 +31,36 @@ export const getcurrency = async () => {};
 
 export const createTransaction = async (data:any) => {
   try {
-    console.log("asdas")
-    const currency = await prisma.currency.create({
+    console.log("hola")
+    const currency = await prisma.transaction.create({
       data: {
-        name: data.name,
-        symbol: data.symbol,
+        accountId: data.accountId,
+        amount: data.amount,
+        type: data.type,
       },
     });
+    
+    console.log("listo");
+    if(data.typetransaction == "increment"){
 
+      const account = await prisma.account.update({
+        where: { id: data.accountId },
+        data: {
+          balance:{
+            increment: data.amount
+          }
+        },
+      });
+    }else{
+      const account = await prisma.account.update({
+        where: { id: data.accountId },
+        data: {
+          balance:{
+            decrement: data.amount
+          }
+        },
+        });
+    }
     return {
       message: `Currency creada exitosamente`,
       status: 200,

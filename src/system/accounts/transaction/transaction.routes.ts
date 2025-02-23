@@ -1,9 +1,9 @@
 import Router, { Request, Response } from "express";
 
-import { CreateTransaction, GetTransaction } from "./transactionController";
+import { CreateTransaction, GetTransaction, GetTransactions } from "./transactionController";
 const router = Router();
 
-router.get("/", GetTransaction);
+router.get("/", GetTransactions);
 
 // router.get("/:cliente",GetAccountType);
 
