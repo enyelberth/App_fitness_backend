@@ -9,7 +9,7 @@ export const GetTransactions = async (req:Request,res:Response)=>{
     const datos = req.body;
     console.log("adsasda");
 
-    const {status,data,message} = await getTransactions();
+    const {status,data,message} = await getTransactions(req.body.accountId);
 
     return res.status(status).json({
         message,

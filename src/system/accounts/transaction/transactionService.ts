@@ -3,9 +3,13 @@ import { transaction } from "../../../routes";
 
 const prisma = new PrismaClient();
 
-export const getTransactions = async () => {
+export const getTransactions = async (id:any) => {
   try {
-    const currencys = await prisma.transaction.findMany();
+    const currencys = await prisma.transaction.findMany({
+      where: {
+        accountId: id,
+      },
+    });
 
     if (currencys.length == 0) {
       return {
