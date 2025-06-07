@@ -12,7 +12,7 @@ const swaggerSpec={
   definition:{
     openapi:"3.0.0",
     info:{
-      title: "Sistema Contable",
+      title: "App fitness",
       version: "1.0.0",
     },
     servers:[
@@ -21,7 +21,8 @@ const swaggerSpec={
       }
     ]
   },
-  apis:[`${path.join(__dirname, 'routes')}/*.route.ts`]
+    apis: [path.join(__dirname, "../routes/*.ts")], // Ajusta según tu estructura
+  //apis:[`${path.join(__dirname, 'routes')}/*.route.ts`]
 }
  
 export class Server {
@@ -63,7 +64,8 @@ export class Server {
     this.app.use(express.static("public"));
   }
   routes() {
-    this.app.use(this.paths.docs, swaggerUi.serve,swaggerUi.setup(swaggerJsDoc(swaggerSpec)));
+        this.app.use(this.paths.docs, swaggerUi.serve, swaggerUi.setup(swaggerJsDoc(swaggerSpec)));
+    //this.app.use(this.paths.docs, swaggerUi.serve,swaggerUi.setup(swaggerJsDoc(swaggerSpec)));
     this.app.use(this.paths.auth, auth);
     this.app.use(this.paths.user, user);
     this.app.use(this.paths.product, producto);
@@ -82,6 +84,7 @@ export class Server {
     this.app.listen(this.port, () => {
       console.clear()
       console.log(`Servidor corriendo en localhost : ${this.port}`);
+      console.log(`Swagger docs en http://localhost:${this.port}/docs`);
     });
   }
 }

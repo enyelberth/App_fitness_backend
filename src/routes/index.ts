@@ -1,17 +1,17 @@
-import user from "../system/users/user.routes";
+import user from "./user.routes";
 // import producto from "../modules/products/product.routes";
-import producto from "../modules/products/product.routes";
-import profile from "../system/users/profile/profiles.routes";
-import account from "../system/accounts/account.route";
-import accountType from "../system/accounts/accountype/accountType.routes";
-import auth from "../auth/auth.routes";
-import paypal from "../system/paypal/paypal.routes";
-import binance from "../system/binance/binance.routes";
-import categoryProduct from "../modules/products/categoryProduct/category.routes"
-import subcategoryProuct from "../modules/products/subCategoryProduct/subcategory.routes"
-import currency from "../system/accounts/currency/currency.routes";
-import transaction from "../system/accounts/transaction/transaction.routes";
-import muscle from "../modules/exercise/muscle/muscle.routes";
+import producto from "./product.routes";
+import profile from "./profiles.routes";
+import account from "./account.route";
+import accountType from "./accountType.routes";
+import auth from "./auth.routes";
+import paypal from "./paypal.routes";
+import binance from "./binance.routes";
+import categoryProduct from "./category.routes"
+import subcategoryProuct from "./subcategory.routes"
+import currency from "./currency.routes";
+import transaction from "./transaction.routes";
+import muscle from "./muscle.routes";
 export {
   user,
   auth,

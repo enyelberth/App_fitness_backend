@@ -1,13 +1,13 @@
 import Router, { Request, Response } from "express";
-import { CaptureOrder, CreateOrder } from "./index.controller";
+import { CreateOrder,CaptureOrder } from "../system/paypal/index.controller";
 
 
 
 const router = Router();
 
-router.get("/createorder",CreateOrder);
+router.get("/createorder", CreateOrder);
 
-router.get("/captureorder",CaptureOrder);
+router.get("/captureorder", CaptureOrder);
 
 // router.get("/:cliente",GetAccountType);
 

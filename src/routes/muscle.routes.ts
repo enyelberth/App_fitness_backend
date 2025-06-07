@@ -1,8 +1,8 @@
 import Router,{ Request,Response } from "express";
 
 const router = Router();
-import { MuscleService } from "./muscleService";
-import { GetMuscle } from "./muscleController";
+import { MuscleService } from "../modules/exercise/muscle/muscleService";
+import { GetMuscle } from "../modules/exercise/muscle/muscleController";
 
 const muscle = new MuscleService();
 

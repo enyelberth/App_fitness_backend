@@ -1,5 +1,6 @@
 import Router, { Request, Response } from "express";
-import { GetCurrencyBinance } from "./binance.controller";
+import { GetCurrencyBinance } from "../system/binance/binance.controller";
+//import { GetCurrencyBinance } from "./binance.controller";
 // import { CaptureOrder, CreateOrder } from "./index.controller";
 
 

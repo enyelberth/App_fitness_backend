@@ -4,7 +4,7 @@ import {
   GetAccountsTypes,
   CreateNewAccountType,
   GetAccountType,
-} from "./accounTypeController";
+} from "../system/accounts/accountype/accounTypeController";
 
 // const product = require("../../controllers/productController");
 const router = Router();
