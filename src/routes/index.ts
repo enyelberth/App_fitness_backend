@@ -11,9 +11,11 @@ import categoryProduct from "../modules/products/categoryProduct/category.routes
 import subcategoryProuct from "../modules/products/subCategoryProduct/subcategory.routes"
 import currency from "../system/accounts/currency/currency.routes";
 import transaction from "../system/accounts/transaction/transaction.routes";
+import muscle from "../modules/exercise/muscle/muscle.routes";
 export {
   user,
   auth,
+  muscle,
   producto,
   categoryProduct,
   subcategoryProuct,

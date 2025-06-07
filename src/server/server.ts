@@ -1,5 +1,5 @@
 import express from "express";
-import { account, accountType, auth, binance, categoryProduct, currency, paypal, producto, profile, subcategoryProuct, transaction, user } from "../routes/index";
+import { account, accountType, auth, binance, categoryProduct, currency, muscle, paypal, producto, profile, subcategoryProuct, transaction, user } from "../routes/index";
 import path from "path";
 // import { version } from "os";
 const cors = require("cors");
@@ -51,6 +51,7 @@ export class Server {
       binance: this.pre + "/binance",
       currency: this.pre + "/currency",
       transaction: this.pre + "/transaction",
+      muscle: this.pre + "/muscle",
       docs: "/docs",
     };
     this.middlewares();
@@ -75,6 +76,7 @@ export class Server {
     this.app.use(this.paths.binance, binance);
     this.app.use(this.paths.currency, currency);
     this.app.use(this.paths.transaction, transaction);
+    this.app.use(this.paths.muscle, muscle);
   }
   listen() {
     this.app.listen(this.port, () => {
