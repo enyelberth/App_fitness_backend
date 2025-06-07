@@ -1,18 +1,38 @@
-import Router, { Request, Response } from "express";
+import { Router, Request, Response } from "express";
 import { GetCurrencyBinance } from "../system/binance/binance.controller";
-//import { GetCurrencyBinance } from "./binance.controller";
-// import { CaptureOrder, CreateOrder } from "./index.controller";
-
-
 
 const router = Router();
 
-router.get("/",GetCurrencyBinance);
+/**
+ * @swagger
+ * tags:
+ *   name: Binance
+ *   description: API para obtener información de monedas desde Binance
+ */
 
-// router.get("/captureorder",CaptureOrder);
-
-// router.get("/:cliente",GetAccountType);
-
-// router.post("/", CreateNewAccountType);
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     summary: Obtiene la información de la moneda desde Binance
+ *     tags: [Binance]
+ *     responses:
+ *       200:
+ *         description: Información de la moneda obtenida correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 symbol:
+ *                   type: string
+ *                   example: "BTCUSDT"
+ *                 price:
+ *                   type: string
+ *                   example: "30000.00"
+ *       500:
+ *         description: Error al obtener la información
+ */
+router.get("/", GetCurrencyBinance);
 
 export default router;
