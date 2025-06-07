@@ -1,3 +1,4 @@
+// GENERADOR Y FUENTE DE DATOS
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,13 +8,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ===================
+// SECCIÓN: ADMINISTRACIÓN
+// ===================
 model Admin {
-  id           String         @id // Añadido valor por defecto
+  id           String         @id
   firstName    String
   lastName     String
   dob          DateTime
   phone        String         @unique
-  username     String         @unique // Corregido de 'usename' a 'username'
+  username     String         @unique
   email        String         @unique
   password     String
   createdAt    DateTime       @default(now())
@@ -49,9 +53,12 @@ model TransactionAdmin {
   accountAdminId String?
 }
 
+// ===================
+// SECCIÓN: USUARIOS Y CUENTAS
+// ===================
 model User {
-  id           Int            @id // Añadido valor por defecto
-  username     String         @unique // Corregido de 'usename' a 'username'
+  id           Int            @id
+  username     String         @unique
   email        String         @unique
   password     String
   accounts     Account[]
@@ -76,18 +83,17 @@ model Profile {
 }
 
 model Account {
-  id      String      @id
-  userId  Int
-  user    User        @relation(fields: [userId], references: [id])
-  type    AccountType @relation(fields: [typeId], references: [id])
-  balance Decimal     @default(0)
-
+  id          String      @id
+  userId      Int
+  user        User        @relation(fields: [userId], references: [id])
+  typeId      Int
+  type        AccountType @relation(fields: [typeId], references: [id])
+  balance     Decimal     @default(0)
   transactions Transaction[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  typeId       Int
-  Currency     Currency?     @relation(fields: [currencyId], references: [id])
-  currencyId   String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  currencyId  String?
+  Currency    Currency?   @relation(fields: [currencyId], references: [id])
 }
 
 model AccountType {
@@ -139,61 +145,25 @@ model Loan {
   updatedAt    DateTime @updatedAt
 }
 
+// Modelo auth obsoleto, considerar eliminar o actualizar
 model auth {
   id       Int    @id
-  usename  String
+  usename  String // Corregir a 'username' si se usa
   password String
 }
 
-//
-
-model Ingresos {
-  id          Int        @id @default(autoincrement())
-  fecha       DateTime   @default(now())
-  description String
-  monto       Float
-  categoria   Categorias @relation(fields: [categoriaId], references: [id])
-  categoriaId Int
-}
-
-model IngresoFijos {
-  id          Int        @id @default(autoincrement())
-  fecha       DateTime   @default(now())
-  description String
-  monto       Float
-  categoria   Categorias @relation(fields: [categoriaId], references: [id])
-  categoriaId Int
-}
-
-model Gasto {
-  id          Int        @id @default(autoincrement())
-  fecha       DateTime   @default(now())
-  description String
-  monto       Float
-  categoria   Categorias @relation(fields: [categoriaId], references: [id])
-  categoriaId Int
-}
-
-model GastoFijo {
-  id          Int        @id @default(autoincrement())
-  fecha       DateTime   @default(now())
-  description String
-  monto       Float
-  categoria   Categorias @relation(fields: [categoriaId], references: [id])
-  categoriaId Int
-}
-
+// ===================
+// SECCIÓN: FINANZAS PERSONALES
+// ===================
 model Categorias {
-  id    Int      @id @default(autoincrement())
-  name  String
-  type  Type     @default(Ganancias)
-  fecha DateTime @default(now())
-
-  // Relaciones
-  ingresos     Ingresos[] // Relación uno a muchos
-  ingresoFijos IngresoFijos[] // Relación uno a muchos
-  gastos       Gasto[] // Relación uno a muchos
-  gastosFijos  GastoFijo[] // Relación uno a muchos
+  id           Int             @id @default(autoincrement())
+  name         String
+  type         Type            @default(Ganancias)
+  fecha        DateTime        @default(now())
+  ingresos     Ingresos[]
+  ingresoFijos IngresoFijos[]
+  gastos       Gasto[]
+  gastosFijos  GastoFijo[]
 }
 
 enum Type {
@@ -201,22 +171,57 @@ enum Type {
   Ganancias
 }
 
+model Ingresos {
+  id          Int        @id @default(autoincrement())
+  fecha       DateTime   @default(now())
+  description String
+  monto       Float
+  categoriaId Int
+  categoria   Categorias @relation(fields: [categoriaId], references: [id])
+}
+
+model IngresoFijos {
+  id          Int        @id @default(autoincrement())
+  fecha       DateTime   @default(now())
+  description String
+  monto       Float
+  categoriaId Int
+  categoria   Categorias @relation(fields: [categoriaId], references: [id])
+}
+
+model Gasto {
+  id          Int        @id @default(autoincrement())
+  fecha       DateTime   @default(now())
+  description String
+  monto       Float
+  categoriaId Int
+  categoria   Categorias @relation(fields: [categoriaId], references: [id])
+}
+
+model GastoFijo {
+  id          Int        @id @default(autoincrement())
+  fecha       DateTime   @default(now())
+  description String
+  monto       Float
+  categoriaId Int
+  categoria   Categorias @relation(fields: [categoriaId], references: [id])
+}
+
+// ===================
+// SECCIÓN: PRODUCTOS Y CATEGORÍAS
+// ===================
 model Product {
-  id                Int                  @id @default(autoincrement())
-  title             String               @db.VarChar(255)
-  description       String
-  price             Float               
-  quantity          Int
-  createdAt         DateTime             @default(now())
-  updatedAt         DateTime             @updatedAt
-
-
-
-  categoryProductId Int
+  id                  Int                 @id @default(autoincrement())
+  title               String              @db.VarChar(255)
+  description         String
+  price               Float
+  quantity            Int
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  categoryProductId   Int
   subCategoryProductId Int
-    
-  category  CategoryProduct  @relation(fields: [categoryProductId], references: [id])
-  subCategory  SubCategoryProduct  @relation(fields: [subCategoryProductId], references: [id])
+  category            CategoryProduct     @relation(fields: [categoryProductId], references: [id])
+  subCategory         SubCategoryProduct  @relation(fields: [subCategoryProductId], references: [id])
 }
 
 model CategoryProduct {
@@ -225,13 +230,80 @@ model CategoryProduct {
   productos Product[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
 }
 
 model SubCategoryProduct {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(255)
-  productId   Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(255)
+  productId Product[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ===================
+// SECCIÓN: FITNESS (CLIENTES, RUTINAS, EJERCICIOS)
+// ===================
+model Cliente {
+  id             Int     @id @default(autoincrement())
+  nombre         String
+  apellido       String
+  email          String     @unique
+  telefono       String?
+  fecha_registro DateTime   @default(now())
+  rutinas        Rutina[]
+  progreso       Progreso[]
+}
+
+model Rutina {
+  id               Int           @id @default(autoincrement())
+  nombre           String
+  descripcion      String?
+  cliente_id       Int?
+  cliente          Cliente?         @relation(fields: [cliente_id], references: [id])
+  rutinaEjercicios RutinaEjercicio[]
+}
+
+model Ejercicio {
+  id                BigInt             @id @default(autoincrement())
+  nombre            String
+  descripcion       String?
+  rutinaEjercicios  RutinaEjercicio[]
+  ejercicioMusculos EjercicioMusculo[]
+  progreso          Progreso[]
+}
+
+model RutinaEjercicio {
+  id           Int     @id @default(autoincrement())
+  rutina_id    Int?
+  rutina       Rutina?    @relation(fields: [rutina_id], references: [id])
+  ejercicio_id BigInt?
+  ejercicio    Ejercicio? @relation(fields: [ejercicio_id], references: [id])
+  repeticiones Int?
+  series       Int?
+}
+
+model Musculo {
+  id                BigInt             @id @default(autoincrement())
+  nombre            String
+  ejercicioMusculos EjercicioMusculo[]
+}
+
+model EjercicioMusculo {
+  id           BigInt     @id @default(autoincrement())
+  ejercicio_id BigInt?
+  ejercicio    Ejercicio? @relation(fields: [ejercicio_id], references: [id])
+  musculo_id   BigInt?
+  musculo      Musculo?   @relation(fields: [musculo_id], references: [id])
+}
+
+model Progreso {
+  id           BigInt     @id @default(autoincrement())
+  cliente_id   Int?
+  cliente      Cliente?   @relation(fields: [cliente_id], references: [id])
+  ejercicio_id BigInt?
+  ejercicio    Ejercicio? @relation(fields: [ejercicio_id], references: [id])
+  fecha        DateTime   @default(now())
+  repeticiones Int?
+  peso         Decimal?
+  comentarios  String?
 }
