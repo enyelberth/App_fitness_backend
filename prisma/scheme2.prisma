@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Cliente {
+  id             BigInt     @id @default(autoincrement())
+  nombre         String
+  apellido       String
+  email          String     @unique
+  telefono       String?
+  fecha_registro DateTime   @default(now())
+  rutinas        Rutina[]
+  progreso       Progreso[]
+}
+
+model Entrenador {
+  id         BigInt    @id @default(autoincrement())
+  nombre     String
+  apellido   String
+  especialidad String?
+  email      String    @unique
+  clases     Clase[]
+}
+
+model Clase {
+  id           BigInt     @id @default(autoincrement())
+  nombre       String
+  descripcion  String?
+  entrenador   Entrenador? @relation(fields: [entrenador_id], references: [id])
+  entrenador_id BigInt?
+  horario      DateTime?
+}
+
+model Ejercicio {
+  id          BigInt     @id @default(autoincrement())
+  nombre      String
+  descripcion String?
+  rutinaEjercicios RutinaEjercicio[]
+  ejercicioMusculos EjercicioMusculo[]
+  progreso    Progreso[]
+}
+
+model Rutina {
+  id          BigInt     @id @default(autoincrement())
+  nombre      String
+  descripcion String?
+  cliente     Cliente?   @relation(fields: [cliente_id], references: [id])
+  cliente_id  BigInt?
+  rutinaEjercicios RutinaEjercicio[]
+}
+
+model RutinaEjercicio {
+  id         BigInt     @id @default(autoincrement())
+  rutina     Rutina?    @relation(fields: [rutina_id], references: [id])
+  rutina_id  BigInt?
+  ejercicio  Ejercicio? @relation(fields: [ejercicio_id], references: [id])
+  ejercicio_id BigInt?
+  cliente    Cliente?   @relation(fields: [cliente_id], references: [id])
+  cliente_id BigInt?
+  repeticiones Int?
+  series     Int?
+}
+
+model Musculo {
+  id          BigInt     @id @default(autoincrement())
+  nombre      String
+  ejercicioMusculos EjercicioMusculo[]
+}
+
+model EjercicioMusculo {
+  id          BigInt     @id @default(autoincrement())
+  ejercicio   Ejercicio? @relation(fields: [ejercicio_id], references: [id])
+  ejercicio_id BigInt?
+  musculo     Musculo?   @relation(fields: [musculo_id], references: [id])
+  musculo_id  BigInt?
+}
+
+model Progreso {
+  id          BigInt     @id @default(autoincrement())
+  cliente     Cliente?   @relation(fields: [cliente_id], references: [id])
+  cliente_id  BigInt?
+  ejercicio   Ejercicio? @relation(fields: [ejercicio_id], references: [id])
+  ejercicio_id BigInt?
+  fecha       DateTime   @default(now())
+  repeticiones Int?
+  peso        Decimal?
+  comentarios String?
+}
