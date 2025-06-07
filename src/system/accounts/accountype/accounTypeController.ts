@@ -4,7 +4,7 @@ import {
   getAccountsTypes,
 } from "./accounTypeService";
 import { GetAccount } from "../accountController";
-
+//Salen 
 export const GetAccountsTypes = async (req: Request, res: Response) => {
   const { data, status, message } = await getAccountsTypes();
   console.log("Obteniendo ACcoun type");
