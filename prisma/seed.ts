@@ -8,6 +8,7 @@ const userDate = [
   { id: 18057999, username: 'enyelberth12', email: 'enyelberthrc12.z@gmail.com', password: '30204334' },
   { id: 14334066, username: 'enyelberth13', email: 'enyelberthrc13.z@gmail.com', password: '30204334' },
 ];
+ 
 
 async function main() {
   // Opcional: limpiar antes de sembrar

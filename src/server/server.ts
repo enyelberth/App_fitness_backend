@@ -45,6 +45,7 @@ export class Server {
       productCategory: this.pre + "/productCategory",
       subCategoryProduct: this.pre + "/subCategoryProduct",
       account: this.pre + "/account",
+      ejercicio: this.pre + "/ejercicio",
       accountType: this.pre + "/accountType",
       profile: this.pre + "/profile",
       auth: this.pre + "/auth",
@@ -75,6 +76,9 @@ export class Server {
     this.app.use(this.paths.accountType, accountType);
     this.app.use(this.paths.profile, profile);
     this.app.use(this.paths.paypal, paypal);
+    //
+    this.app.use(this.paths.ejercicio, account)
+    ///
     this.app.use(this.paths.binance, binance);
     this.app.use(this.paths.currency, currency);
     this.app.use(this.paths.transaction, transaction);
