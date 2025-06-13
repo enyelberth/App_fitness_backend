@@ -12,9 +12,14 @@ import subcategoryProuct from "./subcategory.routes"
 import currency from "./currency.routes";
 import transaction from "./transaction.routes";
 import muscle from "./muscle.routes";
+import authGoogle from "./authGoogle.routes";
+import routine from "./routine.routes";
+
 export {
   user,
+  routine,
   auth,
+  authGoogle,
   muscle,
   producto,
   categoryProduct,
