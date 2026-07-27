@@ -1,0 +1,46 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+docs
+README.md
+
+# Node
+node_modules
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output (in builder stage only, cleaned in runtime stage)
+dist
+
+# Test coverage
+coverage
+.nyc_output
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Prisma
+*.db
+*.db-journal
+
+# CI/CD
+.github
+
+# Other
+.claude
+.vercel

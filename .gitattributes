@@ -1,0 +1,11 @@
+# Normalizar finales de línea: LF en el repo, nativo en el checkout
+* text=auto
+
+# Archivos que siempre deben ser LF
+*.sh text eol=lf
+
+# Binarios
+*.png binary
+*.jpg binary
+*.ico binary
+*.pdf binary

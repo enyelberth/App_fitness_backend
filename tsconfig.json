@@ -24,6 +24,8 @@
     "src/database/**/*.ts",
     "src/common/**/*.ts",
     "src/modules/health/**/*.ts",
+    "src/modules/auth/**/*.ts",
+    "src/modules/users/**/*.ts",
     "src/modules/payments/**/*.ts",
     "src/modules/economy/**/*.ts"
   ],

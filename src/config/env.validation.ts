@@ -2,6 +2,8 @@ const REQUIRED = [
   "DATABASE_URL",
   "JWT_ACCESS_SECRET",
   "JWT_REFRESH_SECRET",
+  "JWT_ACCESS_TTL_SECONDS",
+  "JWT_REFRESH_TTL_SECONDS",
   "CORS_ORIGINS",
 ] as const;
 
@@ -28,5 +30,19 @@ export function validateEnvironment(
     throw new Error("PORT must be an integer between 1 and 65535");
   }
 
-  return { ...config, PORT: port };
+  const accessTtl = Number(config.JWT_ACCESS_TTL_SECONDS);
+  const refreshTtl = Number(config.JWT_REFRESH_TTL_SECONDS);
+  if (!Number.isInteger(accessTtl) || accessTtl < 60) {
+    throw new Error("JWT_ACCESS_TTL_SECONDS must be an integer of at least 60");
+  }
+  if (!Number.isInteger(refreshTtl) || refreshTtl <= accessTtl) {
+    throw new Error("JWT_REFRESH_TTL_SECONDS must be greater than access TTL");
+  }
+
+  return {
+    ...config,
+    PORT: port,
+    JWT_ACCESS_TTL_SECONDS: accessTtl,
+    JWT_REFRESH_TTL_SECONDS: refreshTtl,
+  };
 }

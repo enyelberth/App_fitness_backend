@@ -1,15 +1,79 @@
 version: "3.9"
+
 services:
-  db:
-    image: postgres
-    restart: always
+  # PostgreSQL Database with health check
+  postgres:
+    image: postgres:16-alpine
+    container_name: fitness_postgres
     environment:
-      POSTGRES_USER: enyelberth
-      POSTGRES_DB: sdgdam
-      POSTGRES_PASSWORD: 30204334
+      POSTGRES_USER: fitness_dev
+      POSTGRES_PASSWORD: fitness_dev_password
+      POSTGRES_DB: fitness_db
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=en_US.UTF-8"
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      # Persist data across container restarts
+      - postgres_data:/var/lib/postgresql/data
+      # Optional: mount a SQL init script
+      # - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fitness_dev -d fitness_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - fitness_network
+
+  # Redis (optional, for caching/sessions if needed in future)
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: fitness_redis
+  #   ports:
+  #     - "6379:6379"
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - fitness_network
+
+  # NestJS Application (Development)
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: fitness_api
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://fitness_dev:fitness_dev_password@postgres:5432/fitness_db
+      JWT_ACCESS_SECRET: dev_access_secret_jwt_token_32_chars_minimum
+      JWT_REFRESH_SECRET: dev_refresh_secret_jwt_token_32_chars_minimum
+      CORS_ORIGINS: "http://localhost:3000,http://localhost:4000,http://127.0.0.1:3000,http://127.0.0.1:4000"
+      PORT: 4000
+    ports:
+      - "4000:4000"
+      - "9229:9229"  # Node debugger
+    volumes:
+      # Hot reload: mount source for watch mode
+      - ./src:/app/src
+      - ./package.json:/app/package.json
+      - ./tsconfig.json:/app/tsconfig.json
+      # Don't mount node_modules to use container's version
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - fitness_network
+    restart: unless-stopped
+
 volumes:
-  pgdata:
+  postgres_data:
+    driver: local
+
+networks:
+  fitness_network:
+    driver: bridge

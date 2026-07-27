@@ -1,4 +1,3 @@
-// GENERADOR Y FUENTE DE DATOS
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,302 +7,432 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ===================
-// SECCIÓN: ADMINISTRACIÓN
-// ===================
-model Admin {
-  id           String         @id
-  firstName    String
-  lastName     String
-  dob          DateTime
-  phone        String         @unique
-  username     String         @unique
-  email        String         @unique
-  password     String
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  AccountAdmin AccountAdmin[]
+enum Role {
+  USER
+  COACH
+  ADMIN
 }
 
-model AccountAdmin {
-  id                 String             @id
-  userId             String             @unique
-  admin              Admin              @relation(fields: [userId], references: [id])
-  balance            Decimal            @default(0)
-  transactions       TransactionAdmin[]
-  accountTypeAdminId String?
-  AccountTypeAdmin   AccountTypeAdmin?  @relation(fields: [accountTypeAdminId], references: [id])
-  currencyId         String?
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
+enum UserLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
 }
 
-model AccountTypeAdmin {
-  id           String         @id
-  name         String
-  AccountAdmin AccountAdmin[]
+enum FitnessGoal {
+  LOSE_FAT
+  GAIN_MUSCLE
+  GET_STRONGER
+  GET_HEALTHIER
 }
 
-model TransactionAdmin {
-  id             String        @id @default(uuid())
-  amount         Decimal
-  type           String // 'deposit', 'withdrawal', 'transfer'
-  createdAt      DateTime      @default(now())
-  AccountAdmin   AccountAdmin? @relation(fields: [accountAdminId], references: [id])
-  accountAdminId String?
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  PREFER_NOT_TO_SAY
 }
 
-// ===================
-// SECCIÓN: USUARIOS Y CUENTAS
-// ===================
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum PaymentStatus {
+  CREATED
+  APPROVED
+  COMPLETED
+  CANCELLED
+  FAILED
+  REFUNDED
+}
+
+enum WalletEntryType {
+  CREDIT
+  DEBIT
+  ADJUSTMENT
+}
+
+enum UserFavoriteType {
+  EXERCISE
+  WORKOUT
+}
+
+enum RPEScale {
+  RPE_1
+  RPE_2
+  RPE_3
+  RPE_4
+  RPE_5
+  RPE_6
+  RPE_7
+  RPE_8
+  RPE_9
+  RPE_10
+}
+
+enum SessionStatus {
+  ACTIVE
+  COMPLETED
+  ABANDONED
+  PAUSED
+}
+
+enum DiscomfortType {
+  MILD_DISCOMFORT
+  PAIN
+  SHARP_PAIN
+  PINCHING
+}
+
 model User {
-  id           Int            @id
-  username     String         @unique
-  email        String         @unique
-  password     String
-  accounts     Account[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  Notification Notification[]
-  Loan         Loan?
-  Profile      Profile[]
+  id              String    @id @default(cuid())
+  email           String    @unique
+  username        String    @unique
+  passwordHash    String
+  role            Role      @default(USER)
+  emailVerifiedAt DateTime?
+  deletedAt       DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  profile              Profile?
+  sessions             AuthSession[]
+  workouts             Workout[]
+  progressEntries      ProgressEntry[]
+  payments             Payment[]
+  wallet               Wallet?
+  ratings              ExerciseRating[]
+  favorites            UserFavorite[]
+  workoutSessions      WorkoutSession[] @relation("WorkoutSessions")
+  createdWorkoutTemplate WorkoutTemplate[] @relation("CreatedTemplates")
+
+  @@index([role])
+  @@index([deletedAt])
+  @@map("app_users")
 }
 
 model Profile {
-  id        Int      @id @default(autoincrement())
-  firstName String
-  lastName  String
-  dob       DateTime
-  address   String
-  phone     String   @unique
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  id                 String      @id @default(cuid())
+  userId             String      @unique
+  firstName          String?
+  lastName           String?
+  avatarUrl          String?
+  bio                String?
+  age                Int?
+  gender             Gender?
+  weightKg           Decimal?    @db.Decimal(6, 2)
+  heightCm           Decimal?    @db.Decimal(6, 2)
+  level              UserLevel   @default(BEGINNER)
+  goal               FitnessGoal @default(GET_HEALTHIER)
+  availableEquipment String[]    @default([])
+  availableMinutes   Int?
+  injuries           String[]    @default([])
+  preferences        String[]    @default([])
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("app_profiles")
+}
+
+model AuthSession {
+  id               String    @id @default(cuid())
+  userId           String
+  familyId         String
+  refreshTokenHash String    @unique
+  expiresAt        DateTime
+  revokedAt        DateTime?
+  replacedById     String?
+  userAgent        String?
+  ipAddress        String?
+  createdAt        DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([familyId])
+  @@index([expiresAt])
+  @@map("auth_sessions")
+}
+
+model Exercise {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  videoUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  muscles         ExerciseMuscle[]
+  workoutItems    WorkoutExercise[]
+  progressEntries ProgressEntry[]
+  variations      ExerciseVariation[]
+  ratings         ExerciseRating[]
+  favorites       UserFavorite[]
+  sessionSets     WorkoutSessionSet[]
+
+  @@map("exercises")
+}
+
+model MuscleGroup {
+  id        String   @id @default(cuid())
+  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  exercises ExerciseMuscle[]
+
+  @@map("muscle_groups")
 }
 
-model Account {
-  id          String      @id
-  userId      Int
-  user        User        @relation(fields: [userId], references: [id])
-  typeId      Int
-  type        AccountType @relation(fields: [typeId], references: [id])
-  balance     Decimal     @default(0)
-  transactions Transaction[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  currencyId  String?
-  Currency    Currency?   @relation(fields: [currencyId], references: [id])
+model ExerciseMuscle {
+  exerciseId    String
+  muscleGroupId String
+  isPrimary     Boolean @default(false)
+
+  exercise    Exercise    @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  muscleGroup MuscleGroup @relation(fields: [muscleGroupId], references: [id], onDelete: Cascade)
+
+  @@id([exerciseId, muscleGroupId])
+  @@index([muscleGroupId])
+  @@map("exercise_muscles")
 }
 
-model AccountType {
-  id       Int       @id @default(autoincrement())
-  name     String
-  accounts Account[]
+model Workout {
+  id          String     @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  difficulty  Difficulty @default(BEGINNER)
+  durationMin Int?
+  isTemplate  Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  deletedAt   DateTime?
+
+  user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercises WorkoutExercise[]
+  sessions  WorkoutSession[]
+  favorites UserFavorite[]
+
+  @@index([userId])
+  @@index([deletedAt])
+  @@map("workouts")
 }
 
-model Transaction {
-  id        Int      @id @default(autoincrement())
-  accountId String
-  account   Account  @relation(fields: [accountId], references: [id])
-  amount    Decimal
-  type      String // 'deposit', 'withdrawal', 'transfer'
-  createdAt DateTime @default(now())
+model WorkoutExercise {
+  id         String   @id @default(cuid())
+  workoutId  String
+  exerciseId String
+  position   Int
+  sets       Int?
+  reps       Int?
+  weightKg   Decimal? @db.Decimal(7, 2)
+  restSec    Int?
+  notes      String?
+
+  workout  Workout  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  exercise Exercise @relation(fields: [exerciseId], references: [id], onDelete: Restrict)
+
+  @@unique([workoutId, position])
+  @@index([exerciseId])
+  @@map("workout_exercises")
 }
 
-model Currency {
-  id        String    @id @default(uuid())
-  name      String
-  symbol    String
-  loans     Loan[]
-  accounts  Account[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+model ProgressEntry {
+  id          String   @id @default(cuid())
+  userId      String
+  exerciseId  String?
+  weightKg    Decimal? @db.Decimal(7, 2)
+  bodyFatPct  Decimal? @db.Decimal(5, 2)
+  sets        Int?
+  reps        Int?
+  notes       String?
+  performedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercise Exercise? @relation(fields: [exerciseId], references: [id], onDelete: SetNull)
+
+  @@index([userId, performedAt])
+  @@index([exerciseId])
+  @@map("progress_entries")
 }
 
-model Notification {
-  id        String   @id @default(uuid())
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  title     String
-  message   String
-  read      Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Payment {
+  id                String        @id @default(cuid())
+  userId            String
+  provider          String        @default("PAYPAL")
+  externalOrderId   String        @unique
+  externalCaptureId String?       @unique
+  idempotencyKey    String        @unique
+  amount            Decimal       @db.Decimal(12, 2)
+  currency          String        @db.VarChar(3)
+  status            PaymentStatus @default(CREATED)
+  completedAt       DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Restrict)
+  walletEntries WalletEntry[]
+
+  @@index([userId, createdAt])
+  @@index([status])
+  @@map("payments")
 }
 
-model Loan {
-  id           String   @id @default(uuid())
-  userId       Int      @unique
-  user         User     @relation(fields: [userId], references: [id])
-  amount       Decimal
-  interestRate Decimal
-  currencyId   String
-  currency     Currency @relation(fields: [currencyId], references: [id])
-  dueDate      DateTime
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-}
-
-// Modelo auth obsoleto, considerar eliminar o actualizar
-model auth {
-  id       Int    @id
-  usename  String // Corregir a 'username' si se usa
-  password String
-}
-
-// ===================
-// SECCIÓN: FINANZAS PERSONALES
-// ===================
-model Categorias {
-  id           Int             @id @default(autoincrement())
-  name         String
-  type         Type            @default(Ganancias)
-  fecha        DateTime        @default(now())
-  ingresos     Ingresos[]
-  ingresoFijos IngresoFijos[]
-  gastos       Gasto[]
-  gastosFijos  GastoFijo[]
-}
-
-enum Type {
-  Gasto
-  Ganancias
-}
-
-model Ingresos {
-  id          Int        @id @default(autoincrement())
-  fecha       DateTime   @default(now())
-  description String
-  monto       Float
-  categoriaId Int
-  categoria   Categorias @relation(fields: [categoriaId], references: [id])
-}
-
-model IngresoFijos {
-  id          Int        @id @default(autoincrement())
-  fecha       DateTime   @default(now())
-  description String
-  monto       Float
-  categoriaId Int
-  categoria   Categorias @relation(fields: [categoriaId], references: [id])
-}
-
-model Gasto {
-  id          Int        @id @default(autoincrement())
-  fecha       DateTime   @default(now())
-  description String
-  monto       Float
-  categoriaId Int
-  categoria   Categorias @relation(fields: [categoriaId], references: [id])
-}
-
-model GastoFijo {
-  id          Int        @id @default(autoincrement())
-  fecha       DateTime   @default(now())
-  description String
-  monto       Float
-  categoriaId Int
-  categoria   Categorias @relation(fields: [categoriaId], references: [id])
-}
-
-// ===================
-// SECCIÓN: PRODUCTOS Y CATEGORÍAS
-// ===================
-model Product {
-  id                  Int                 @id @default(autoincrement())
-  title               String              @db.VarChar(255)
-  description         String
-  price               Float
-  quantity            Int
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-  categoryProductId   Int
-  subCategoryProductId Int
-  category            CategoryProduct     @relation(fields: [categoryProductId], references: [id])
-  subCategory         SubCategoryProduct  @relation(fields: [subCategoryProductId], references: [id])
-}
-
-model CategoryProduct {
-  id        Int      @id @default(autoincrement())
-  name      String   @db.VarChar(255)
-  productos Product[]
+model Wallet {
+  id        String   @id @default(cuid())
+  userId    String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  entries WalletEntry[]
+
+  @@map("wallets")
 }
 
-model SubCategoryProduct {
-  id        Int      @id @default(autoincrement())
-  name      String   @db.VarChar(255)
-  productId Product[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model WalletEntry {
+  id             String          @id @default(cuid())
+  walletId       String
+  paymentId      String?
+  type           WalletEntryType
+  amount         Int
+  reason         String
+  idempotencyKey String          @unique
+  createdAt      DateTime        @default(now())
+
+  wallet  Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  payment Payment? @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+
+  @@index([walletId, createdAt])
+  @@index([paymentId])
+  @@map("wallet_entries")
 }
 
-// ===================
-// SECCIÓN: FITNESS (CLIENTES, RUTINAS, EJERCICIOS)
-// ===================
-model Cliente {
-  id             Int     @id @default(autoincrement())
-  nombre         String
-  apellido       String
-  email          String     @unique
-  telefono       String?
-  fecha_registro DateTime   @default(now())
-  rutinas        Rutina[]
-  progreso       Progreso[]
+model ExerciseVariation {
+  id          String   @id @default(cuid())
+  exerciseId  String
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  exercise Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  @@unique([exerciseId, name])
+  @@map("exercise_variations")
 }
 
-model Rutina {
-  id               Int           @id @default(autoincrement())
-  nombre           String
-  descripcion      String?
-  cliente_id       Int?
-  cliente          Cliente?         @relation(fields: [cliente_id], references: [id])
-  rutinaEjercicios RutinaEjercicio[]
+model ExerciseRating {
+  id         String   @id @default(cuid())
+  userId     String
+  exerciseId String
+  rating     Int
+  review     String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercise Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, exerciseId])
+  @@index([exerciseId])
+  @@map("exercise_ratings")
 }
 
-model Ejercicio {
-  id                BigInt             @id @default(autoincrement())
-  nombre            String
-  descripcion       String?
-  rutinaEjercicios  RutinaEjercicio[]
-  ejercicioMusculos EjercicioMusculo[]
-  progreso          Progreso[]
+model UserFavorite {
+  id         String             @id @default(cuid())
+  userId     String
+  type       UserFavoriteType
+  exerciseId String?
+  workoutId  String?
+  createdAt  DateTime           @default(now())
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercise Exercise? @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  workout  Workout?  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, type, exerciseId, workoutId])
+  @@index([userId])
+  @@map("user_favorites")
 }
 
-model RutinaEjercicio {
-  id           Int     @id @default(autoincrement())
-  rutina_id    Int?
-  rutina       Rutina?    @relation(fields: [rutina_id], references: [id])
-  ejercicio_id BigInt?
-  ejercicio    Ejercicio? @relation(fields: [ejercicio_id], references: [id])
-  repeticiones Int?
-  series       Int?
+model WorkoutSession {
+  id        String        @id @default(cuid())
+  workoutId String
+  userId    String
+  startedAt DateTime
+  endedAt   DateTime?
+  status    SessionStatus @default(ACTIVE)
+  notes     String?
+  createdAt DateTime      @default(now())
+
+  workout       Workout              @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  user          User                 @relation("WorkoutSessions", fields: [userId], references: [id], onDelete: Cascade)
+  sets          WorkoutSessionSet[]
+  discomforts   SessionDiscomfort[]
+
+  @@index([workoutId])
+  @@index([userId])
+  @@index([status])
+  @@map("workout_sessions")
 }
 
-model Musculo {
-  id                BigInt             @id @default(autoincrement())
-  nombre            String
-  ejercicioMusculos EjercicioMusculo[]
+model WorkoutSessionSet {
+  id               String   @id @default(cuid())
+  sessionId        String
+  exerciseId       String
+  setsCompleted    Int
+  repsPerformed    Int[]
+  weightUsed       Decimal? @db.Decimal(7, 2)
+  rpe              Int?
+  plannedRestSec   Int?
+  actualRestSec    Int?
+  isWarmupSet      Boolean  @default(false)
+  notes            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  session  WorkoutSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  exercise Exercise       @relation(fields: [exerciseId], references: [id], onDelete: Restrict)
+
+  @@index([sessionId])
+  @@map("workout_session_sets")
 }
 
-model EjercicioMusculo {
-  id           BigInt     @id @default(autoincrement())
-  ejercicio_id BigInt?
-  ejercicio    Ejercicio? @relation(fields: [ejercicio_id], references: [id])
-  musculo_id   BigInt?
-  musculo      Musculo?   @relation(fields: [musculo_id], references: [id])
+model SessionDiscomfort {
+  id        String         @id @default(cuid())
+  sessionId String
+  bodyPart  String
+  type      DiscomfortType
+  severity  Int
+  notes     String?
+  createdAt DateTime       @default(now())
+
+  session WorkoutSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@map("session_discomforts")
 }
 
-model Progreso {
-  id           BigInt     @id @default(autoincrement())
-  cliente_id   Int?
-  cliente      Cliente?   @relation(fields: [cliente_id], references: [id])
-  ejercicio_id BigInt?
-  ejercicio    Ejercicio? @relation(fields: [ejercicio_id], references: [id])
-  fecha        DateTime   @default(now())
-  repeticiones Int?
-  peso         Decimal?
-  comentarios  String?
+model WorkoutTemplate {
+  id          String     @id @default(cuid())
+  createdBy   String
+  name        String
+  description String?
+  difficulty  Difficulty @default(BEGINNER)
+  durationMin Int?
+  exercises   Json
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  creator User @relation("CreatedTemplates", fields: [createdBy], references: [id], onDelete: Restrict)
+
+  @@index([createdBy])
+  @@map("workout_templates")
 }
