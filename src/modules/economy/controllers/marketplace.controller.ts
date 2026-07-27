@@ -1,65 +1,86 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Param,
-  UseGuards,
-  HttpCode,
-  HttpStatus,
-} from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
+import { Controller, Get, Post, Delete, Param, Body, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import { Public } from '../../../common/decorators/public.decorator';
 import { MarketplaceService } from '../services/marketplace.service';
 
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
-@ApiTags('Economy - Marketplace')
 @Controller('economy/marketplace')
 export class MarketplaceController {
-  constructor(private service: MarketplaceService) {}
+  constructor(private marketplaceService: MarketplaceService) {}
 
-  /**
-   * GET - Ver tienda disponible
-   */
-  @Get('shop')
-  @ApiOperation({ summary: 'View shop items' })
-  async getShop(@CurrentUser() user: any) {
-    return this.service.getShop(user.id);
-  }
-
-  /**
-   * POST - Comprar con coins
-   */
-  @Post('buy/coins/:cosmeticId')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Buy with coins' })
-  async buyWithCoins(
-    @Param('cosmeticId') cosmeticId: string,
-    @CurrentUser() user: any,
+  @Post('listings')
+  @UseGuards(JwtAuthGuard)
+  async createListing(
+    @CurrentUser('sub') userId: string,
+    @Body() body: { cosmeticId: string; cosmeticName: string; price: number; currency?: string; condition?: string },
   ) {
-    return this.service.buyWithCoins(user.id, cosmeticId);
+    return this.marketplaceService.createListing(userId, body.cosmeticId, body.cosmeticName, body.price, body.currency as any);
   }
 
-  /**
-   * POST - Comprar con gems
-   */
-  @Post('buy/gems/:cosmeticId')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Buy with gems' })
-  async buyWithGems(
-    @Param('cosmeticId') cosmeticId: string,
-    @CurrentUser() user: any,
+  @Get('listings')
+  @Public()
+  async getActiveListings(@Query('page') page: string = '0', @Query('limit') limit: string = '50') {
+    const offset = parseInt(page) * parseInt(limit);
+    return this.marketplaceService.getActiveListings(parseInt(limit), offset);
+  }
+
+  @Get('listings/search')
+  @Public()
+  async searchListings(@Query('q') query: string, @Query('limit') limit: string = '50') {
+    return this.marketplaceService.searchListings(query, parseInt(limit));
+  }
+
+  @Get('listings/:listingId')
+  @Public()
+  async getListingDetails(@Param('listingId') listingId: string) {
+    return this.marketplaceService.getListingDetails(listingId);
+  }
+
+  @Post('listings/:listingId/purchase')
+  @UseGuards(JwtAuthGuard)
+  async purchaseListing(
+    @CurrentUser('sub') userId: string,
+    @Param('listingId') listingId: string,
   ) {
-    return this.service.buyWithGems(user.id, cosmeticId);
+    return this.marketplaceService.purchaseFromListing(userId, listingId);
   }
 
-  /**
-   * GET - Mi inventario de compras
-   */
-  @Get('inventory')
-  @ApiOperation({ summary: 'Get my purchased items' })
-  async getInventory(@CurrentUser() user: any) {
-    return this.service.getUserInventory(user.id);
+  @Delete('listings/:listingId')
+  @UseGuards(JwtAuthGuard)
+  async cancelListing(
+    @CurrentUser('sub') userId: string,
+    @Param('listingId') listingId: string,
+  ) {
+    return this.marketplaceService.cancelListing(userId, listingId);
+  }
+
+  @Get('my-listings')
+  @UseGuards(JwtAuthGuard)
+  async getUserListings(@CurrentUser('sub') userId: string) {
+    return this.marketplaceService.getUserListings(userId);
+  }
+
+  @Get('trending')
+  @Public()
+  async getTrendingListings() {
+    return this.marketplaceService.getTrendingListings();
+  }
+
+  @Get('stats')
+  @Public()
+  async getMarketStats() {
+    return this.marketplaceService.getMarketStats();
+  }
+
+  @Get('price-history/:cosmeticId')
+  @Public()
+  async getPriceHistory(@Param('cosmeticId') cosmeticId: string) {
+    return this.marketplaceService.getPriceHistory(cosmeticId);
+  }
+
+  @Get('sales-history')
+  @UseGuards(JwtAuthGuard)
+  async getUserSalesHistory(@CurrentUser('sub') userId: string) {
+    return this.marketplaceService.getUserSalesHistory(userId);
   }
 }

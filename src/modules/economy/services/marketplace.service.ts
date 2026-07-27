@@ -1,115 +1,122 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
-import { WalletService } from './wallet.service';
+import { PrismaService } from '../../database/prisma.service';
 
-/**
- * Marketplace Service
- * Maneja compra/venta de cosmética
- */
+export interface MarketplaceListing {
+  id: string;
+  sellerId: string;
+  cosmeticId: string;
+  cosmeticName: string;
+  price: number;
+  currency: 'COINS' | 'GEMS';
+  condition: 'NEW' | 'LIKE_NEW' | 'GOOD';
+  status: 'ACTIVE' | 'SOLD' | 'CANCELLED';
+  createdAt: Date;
+  expiresAt: Date;
+}
+
 @Injectable()
 export class MarketplaceService {
-  // Mock cosmetics shop
-  private shop = [
-    { cosmeticId: 'shirt-1', name: 'Blue Shirt', price: 100, gemPrice: null },
-    { cosmeticId: 'pants-1', name: 'Black Pants', price: 100, gemPrice: null },
-    { cosmeticId: 'shoes-1', name: 'Sport Shoes', price: 50, gemPrice: null },
-    { cosmeticId: 'hat-1', name: 'Baseball Cap', price: 75, gemPrice: null },
-    { cosmeticId: 'weapon-1', name: 'Gold Sword', price: null, gemPrice: 500 },
-    { cosmeticId: 'weapon-2', name: 'Diamond Sword', price: null, gemPrice: 1000 },
-  ];
+  private listings: Map<string, MarketplaceListing> = new Map();
+  private salesHistory: MarketplaceListing[] = [];
 
-  // User inventory (mock)
-  private userInventory = new Map<string, Set<string>>();
+  constructor(private prisma: PrismaService) {}
 
-  constructor(private walletService: WalletService) {}
-
-  /**
-   * Obtener tienda
-   */
-  async getShop(userId: string) {
-    const inventory = this.userInventory.get(userId) || new Set();
-
-    return this.shop.map((item) => ({
-      ...item,
-      owned: inventory.has(item.cosmeticId),
-    }));
+  async createListing(
+    userId: string,
+    cosmeticId: string,
+    cosmeticName: string,
+    price: number,
+    currency: 'COINS' | 'GEMS' = 'COINS',
+    condition: 'NEW' | 'LIKE_NEW' | 'GOOD' = 'LIKE_NEW',
+  ): Promise<MarketplaceListing> {
+    const listingId = 'list_' + Math.random().toString(36).substr(2, 24);
+    const listing: MarketplaceListing = {
+      id: listingId,
+      sellerId: userId,
+      cosmeticId,
+      cosmeticName,
+      price,
+      currency,
+      condition,
+      status: 'ACTIVE',
+      createdAt: new Date(),
+      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    };
+    this.listings.set(listingId, listing);
+    return listing;
   }
 
-  /**
-   * Comprar con coins
-   */
-  async buyWithCoins(userId: string, cosmeticId: string) {
-    const item = this.shop.find((s) => s.cosmeticId === cosmeticId);
-
-    if (!item) {
-      throw new NotFoundException('Item not found');
-    }
-
-    if (!item.price) {
-      throw new BadRequestException('This item is not available for coins');
-    }
-
-    // Verificar si ya lo tiene
-    const inventory = this.userInventory.get(userId) || new Set();
-    if (inventory.has(cosmeticId)) {
-      throw new BadRequestException('You already own this item');
-    }
-
-    // Restar coins y agregar al inventario
-    const wallet = await this.walletService.getWallet(userId);
-
-    if (wallet.coins < item.price) {
-      throw new BadRequestException('Insufficient coins');
-    }
-
-    // Simulación: en producción sería una transacción real
-    await this.walletService.addCoins(userId, -item.price, 'SHOP', `Purchased: ${item.name}`);
-
-    inventory.add(cosmeticId);
-    this.userInventory.set(userId, inventory);
-
-    return { success: true, message: `${item.name} purchased!` };
+  async getActiveListings(limit: number = 50, offset: number = 0): Promise<MarketplaceListing[]> {
+    return Array.from(this.listings.values())
+      .filter((l) => l.status === 'ACTIVE' && l.expiresAt > new Date())
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .slice(offset, offset + limit);
   }
 
-  /**
-   * Comprar con gems
-   */
-  async buyWithGems(userId: string, cosmeticId: string) {
-    const item = this.shop.find((s) => s.cosmeticId === cosmeticId);
-
-    if (!item) {
-      throw new NotFoundException('Item not found');
-    }
-
-    if (!item.gemPrice) {
-      throw new BadRequestException('This item is not available for gems');
-    }
-
-    // Verificar si ya lo tiene
-    const inventory = this.userInventory.get(userId) || new Set();
-    if (inventory.has(cosmeticId)) {
-      throw new BadRequestException('You already own this item');
-    }
-
-    const wallet = await this.walletService.getWallet(userId);
-
-    if (wallet.gems < item.gemPrice) {
-      throw new BadRequestException('Insufficient gems');
-    }
-
-    // Simulación
-    await this.walletService.addGems(userId, -item.gemPrice, 'SHOP');
-
-    inventory.add(cosmeticId);
-    this.userInventory.set(userId, inventory);
-
-    return { success: true, message: `${item.name} purchased!` };
+  async searchListings(query: string, limit: number = 50): Promise<MarketplaceListing[]> {
+    return Array.from(this.listings.values())
+      .filter(
+        (l) =>
+          l.status === 'ACTIVE' &&
+          l.expiresAt > new Date() &&
+          l.cosmeticName.toLowerCase().includes(query.toLowerCase()),
+      )
+      .sort((a, b) => a.price - b.price)
+      .slice(0, limit);
   }
 
-  /**
-   * Obtener inventario del usuario
-   */
-  async getUserInventory(userId: string) {
-    const inventory = this.userInventory.get(userId) || new Set();
-    return Array.from(inventory);
+  async getListingDetails(listingId: string): Promise<MarketplaceListing | null> {
+    const listing = this.listings.get(listingId);
+    if (!listing) return null;
+    if (listing.status !== 'ACTIVE') return null;
+    if (listing.expiresAt <= new Date()) return null;
+    return listing;
+  }
+
+  async purchaseFromListing(buyerId: string, listingId: string): Promise<{ success: boolean; message: string }> {
+    const listing = this.listings.get(listingId);
+    if (!listing) throw new NotFoundException('Listing not found');
+    if (listing.status !== 'ACTIVE') throw new BadRequestException('Listing is no longer active');
+    if (listing.sellerId === buyerId) throw new BadRequestException('Cannot purchase your own listing');
+    
+    listing.status = 'SOLD';
+    this.salesHistory.push(listing);
+    return { success: true, message: `Purchased ${listing.cosmeticName}` };
+  }
+
+  async cancelListing(userId: string, listingId: string): Promise<{ success: boolean }> {
+    const listing = this.listings.get(listingId);
+    if (!listing) throw new NotFoundException('Listing not found');
+    if (listing.sellerId !== userId) throw new BadRequestException('Cannot cancel others listings');
+    listing.status = 'CANCELLED';
+    return { success: true };
+  }
+
+  async getUserListings(userId: string): Promise<MarketplaceListing[]> {
+    return Array.from(this.listings.values())
+      .filter((l) => l.sellerId === userId && l.status === 'ACTIVE')
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  async getPriceHistory(cosmeticId: string): Promise<any[]> {
+    return [{ date: new Date(), price: 50000, currency: 'COINS' }];
+  }
+
+  async getTrendingListings(limit: number = 10): Promise<any[]> {
+    return Array.from(this.listings.values())
+      .filter((l) => l.status === 'ACTIVE')
+      .slice(0, limit);
+  }
+
+  async getMarketStats(): Promise<any> {
+    return {
+      totalListings: this.listings.size,
+      totalSold: this.salesHistory.length,
+      avgPrice: { coins: 50000, gems: 500 },
+    };
+  }
+
+  async getUserSalesHistory(userId: string): Promise<MarketplaceListing[]> {
+    return this.salesHistory.filter((l) => l.sellerId === userId);
   }
 }
