@@ -1,8 +1,13 @@
-import { Module } from "@nestjs/common";
+import { Module } from '@nestjs/common';
+import { CommonModule } from '../../common/common.module';
+import { EventsModule } from '../../events/events.module';
+import { WalletController } from './controllers/wallet.controller';
+import { WalletService } from './services/wallet.service';
 
-/**
- * Contexto reservado para moneda interna. Su ledger será independiente de
- * PayPal y sólo recibirá créditos desde pagos confirmados e idempotentes.
- */
-@Module({})
+@Module({
+  imports: [CommonModule, EventsModule],
+  controllers: [WalletController],
+  providers: [WalletService],
+  exports: [WalletService],
+})
 export class EconomyModule {}
