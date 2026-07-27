@@ -1,47 +1,63 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
-import { ApiOkResponse, ApiTags } from "@nestjs/swagger";
-import { Throttle } from "@nestjs/throttler";
-import { Public } from "../../common/decorators/public.decorator";
-import { CreateUserDto } from "../users/dto/create-user.dto";
-import { AuthService } from "./auth.service";
-import { AuthResponseDto } from "./dto/auth-response.dto";
-import { LoginDto } from "./dto/login.dto";
-import { RefreshTokenDto } from "./dto/refresh-token.dto";
+﻿import { Controller, Post, Get, Body, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { AuthService } from './auth.service';
+import { RegisterDto, LoginDto, AuthResponseDto, ForgotPasswordDto, ResetPasswordDto, VerifyEmailDto } from './dto';
+import { Public } from '../../common/decorators/public.decorator';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { AuthenticatedUser } from '../../common/types';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
-@ApiTags("auth")
-@Controller("auth")
+@ApiTags('auth')
+@Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
+  @Post('register')
   @Public()
-  @Throttle({ default: { limit: 5, ttl: 60_000 } })
-  @Post("register")
-  @ApiOkResponse({ type: AuthResponseDto })
-  register(@Body() dto: CreateUserDto): Promise<AuthResponseDto> {
-    return this.authService.register(dto);
+  async register(@Body() registerDto: RegisterDto): Promise<AuthResponseDto> {
+    return this.authService.register(registerDto);
   }
 
+  @Post('login')
   @Public()
-  @Throttle({ default: { limit: 5, ttl: 60_000 } })
-  @HttpCode(HttpStatus.OK)
-  @Post("login")
-  @ApiOkResponse({ type: AuthResponseDto })
-  login(@Body() dto: LoginDto): Promise<AuthResponseDto> {
-    return this.authService.login(dto);
+  async login(@Body() loginDto: LoginDto): Promise<AuthResponseDto> {
+    return this.authService.login(loginDto);
   }
 
+  @Post('refresh')
   @Public()
-  @Throttle({ default: { limit: 10, ttl: 60_000 } })
-  @HttpCode(HttpStatus.OK)
-  @Post("refresh")
-  refresh(@Body() dto: RefreshTokenDto): Promise<AuthResponseDto> {
-    return this.authService.refresh(dto.refreshToken);
+  async refresh(@Body() body: { refreshToken: string }): Promise<AuthResponseDto> {
+    return this.authService.refreshToken(body.refreshToken);
   }
 
+  @Post('forgot-password')
   @Public()
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @Post("logout")
-  async logout(@Body() dto: RefreshTokenDto): Promise<void> {
-    await this.authService.logout(dto.refreshToken);
+  async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(forgotPasswordDto);
+  }
+
+  @Post('reset-password')
+  @Public()
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.authService.resetPassword(resetPasswordDto);
+  }
+
+  @Post('verify-email')
+  @Public()
+  async verifyEmail(@Body() verifyEmailDto: VerifyEmailDto) {
+    return this.authService.verifyEmail(verifyEmailDto);
+  }
+
+  @Post('generate-verification-token')
+  @Public()
+  async generateVerificationToken(@Body() body: { email: string }) {
+    return this.authService.generateVerificationToken(body.email);
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async getMe(@CurrentUser() user: AuthenticatedUser) {
+    return user;
   }
 }

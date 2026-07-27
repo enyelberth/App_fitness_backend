@@ -5,6 +5,7 @@ import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { validateEnvironment } from "./config/env.validation";
 import { JwtAuthGuard } from "./common/guards/jwt-auth.guard";
 import { RolesGuard } from "./common/guards/roles.guard";
+import { CommonModule } from "./common/common.module";
 import { DatabaseModule } from "./database/database.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { HealthModule } from "./modules/health/health.module";
@@ -19,6 +20,9 @@ import { FitnessModule } from "./modules/fitness/fitness.module";
 import { GameModule } from "./modules/game/game.module";
 import { PaymentsModule } from "./modules/payments/payments.module";
 import { EconomyModule } from "./modules/economy/economy.module";
+import { SocialModule } from "./modules/social/social.module";
+import { AdminModule } from "./modules/admin/admin.module";
+import { NotificationModule } from "./modules/notifications/notification.module";
 
 @Module({
   imports: [
@@ -34,6 +38,7 @@ import { EconomyModule } from "./modules/economy/economy.module";
         limit: 100,
       },
     ]),
+    CommonModule,
     DatabaseModule,
     HealthModule,
     AuthModule,
@@ -43,11 +48,14 @@ import { EconomyModule } from "./modules/economy/economy.module";
     ProgressModule,
 
     // Nueva arquitectura modular
-    EventsModule,      // Event Bus (necesario para todo)
-    FitnessModule,     // Fitness MVP
-    GameModule,        // Game RPG (escucha Fitness)
-    PaymentsModule,    // Payments
-    EconomyModule,     // Economy (escucha Game + Payments)
+    EventsModule,        // Event Bus (necesario para todo)
+    FitnessModule,       // Fitness MVP
+    GameModule,          // Game RPG (escucha Fitness)
+    PaymentsModule,      // Payments
+    EconomyModule,       // Economy (escucha Game + Payments)
+    SocialModule,        // Social (Friends, Followers)
+    AdminModule,         // Admin (Stats, Management)
+    NotificationModule,  // Notifications (In-app messages)
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },
